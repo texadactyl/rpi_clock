@@ -1,0 +1,233 @@
+Raspberry Pi Clock & Weather Display (rpi_clock)
+
+Preparation Notes
+
+=======================================================
+System requirements
+=======================================================
+
+* Hardware
+
+	- Raspberry Pi 2 or 3; maybe an earlier model too
+	- HDMI display and cable
+	- Quimat 3.5-inch TFT Touch Screen, 320x480 Resolution LCD Display with: 
+		"Protective Case" (easily breaks)
+		3 Heat Sinks
+		Touch Pen (useful and required for the calibration test)
+
+* Operating system: Raspbian Stretch with Desktop
+
+	Tested with:
+		Release date:2017-09-07
+		Kernel version:4.9
+
+* Software
+
+	- Python 3 (rpi_clock will not run with Python 2)
+	- python3-tk and dependencies, including tk, tcl, and libx11
+	- git
+	- https://github.com/goodtft/LCD-show
+	- https://github.com/texadactyl/rpi_clock
+	- Weather Underground API reporting
+
+===============================================================
+On a Linux, Mac, or Windows desktop system, prepare the MicroSD
+===============================================================
+
+* Go to https://www.raspberrypi.org/downloads/raspbian/
+
+* Download Raspbian Stretch (latest) ==> a zip file.
+
+* Extract the img file from the zip file.
+
+* Write img to the MicroSD device. 
+  Windows user can follow the instructions provided by https://github.com/goodtft/LCD-show.
+  Instructions for a Linux or Unix PC follow:
+
+     - Insert the MicroSD into a MicroSD caddy adapter which has a USB plug for your desktop computer.
+     - Then, insert the caddy into a USB connector on your desktop computer.
+     - ***** MAKE SURE THAT YOU ARE WRITING TO THE DESIRED DEVICE *****
+       You can use the `mount` command without parameters to show what was just mounted when you plugged in the caddy.
+     - ***** `dd` CANNOT BE UNDONE !!!!!
+     - On my Linux desktop, my USB device turned out to be /dev/sdc and two existing partitions {sdc1, sdc2} were
+       automounted.
+     - You must un-mount (`sudo umount`) any old partitions on the MicroSD drive before using `dd`.
+     - For me recently (an example), the following is how I proceeded:
+          sudo umount /dev/sdc1     # Unmount an old boot partition
+          sudo umount /dev/sdc2     # Unmount an old "/" partition
+          sudo dd if=/home/elkins/Downloads/2017-09-07-raspbian-stretch.img of=/dev/sdc bs=4M
+     - Note that I used "sdc" (entire device) and not "sdc1" (partition) as the target of `dd`.
+
+===================================================================
+Set up on the Raspberry Pi target system with HDMI display
+===================================================================
+
+* Install MicroSD in RPi and perform 1st boot
+
+* Login as pi with password=raspberry.
+
+* Change the password for user pi to avoid future SSH client complaints:
+
+	sudo raspi-config
+		1 Change User Password Change password for the current user
+
+* Non-UK only (E.g. USA):
+
+	sudo raspi-config
+		4 Localization Options
+			I1 Locale			# For USA: set to en_US.UTF-8
+			I2 Timezone			# Set to local timezone as appropriate for your region
+			I4 Wifi Country		# Set the country for your Wifi
+
+* Non-UK only (E.g. USA)
+
+	# For USA: set to Generic 104-key PC, English (US) layout
+	sudo dpkg-reconfiguration keyboard-configuration   
+
+* If you made any localization modifications in the previous steps, then:
+
+	sudo reboot
+
+* Install SSH daemon services:
+
+	sudo raspi-config
+		5 Interfacing Options
+			P2 SSH (Enable the SSH server)
+
+* Optional: Save wear and tear on the MicroSD and run somewhat faster.
+  As the root, edit /etc/fstab and append with:
+
+	tmpfs /tmp tmpfs defaults,noatime,nosuid,size=256m 0 0
+	tmpfs /run tmpfs defaults,noatime,nosuid,size=64m 0 0
+
+* Optional: Create a static IP address for convenience with an external SSH client.
+
+	Assuming that: 
+
+		You are using Wifi and your wireless device is wlan0.
+		The desired IP address for the Raspberry Pi = 192.168.1.103
+		The router IP address = 192.168.1.1
+
+	Append to /etc/dhcpcd.conf:
+
+		interface wlan0
+		static ip_address=192.168.1.103/24
+		static routers=192.168.1.1
+		static domain_name_servers=192.168.1.1 8.8.8.8
+
+	Note that if you are using wired Ethernet and its device name is eth0,
+	then specify this interface instead:
+
+		interface eth0
+      
+* sudo reboot
+
+* The remaining steps can be performed with an SSH client to the Pi.
+
+=============================================================================
+Update the base system since the img file was made available for downloading.
+=============================================================================
+
+* sudo apt update
+
+* sudo apt -y dist-upgrade   
+
+# This last step might run like a tortoise.
+# Also, if a new kernel is installed, don't bother rebooting just quite yet.
+
+=============================================================================
+Do hardware assembly.
+Add drivers for touchscreen display from https://github.com/goodtft/LCD-show.
+Calibrate and fix the calibration section manually (ugh!).
+=============================================================================
+
+* The hardware installation is indicated with a picture and no guidance.  Line up pins as shown.
+
+* Follow github LCD-show software installation instructions.
+  This updates several system storage areas of the Raspberry Pi.
+
+* Follow github LCD-show touchscreen calibration instructions.
+  Update /etc/X11/xorg.conf.d/99-calibration.conf as indicated.
+
+* To get the mouse-pointer to move in the same direction as the pen or a finger on the touch-screen, 
+  I added the following just before EndSection in /etc/X11/xorg.conf.d/99-calibration.conf:
+
+    Option "InvertY" "true"
+    Option "InvertX" "true"
+
+* Stop X from timing out the display and going blank:
+  Create or append /etc/X11/xorg.conf as follows:
+
+	Section "ServerFlags"
+	Option "blank time" "0"
+	Option "standby time" "0"
+	Option "suspend time" "0"
+	Option "off time" "0"
+	EndSection 
+
+* sudo reboot
+
+======================================================
+Screen Orientation
+======================================================
+
+I stood the display up such that the power chord and HDMI adapter are pointing up (the way I wanted for deployment).
+This setting in /boot/config.txt worked for me:
+
+	dtoverlay=tft35a:rotate=270
+
+As an aside, I experimented with rotate values and observed:
+
+	rotate=0 	start of display area is at physical left
+	rotate=90 	start of display area is at physical bottom (up-side down)
+	rotate=180 	start of display area is at physical right
+	rotate=270 	start of display area is at physical top (right-side up)
+
+======================================================
+ Install rpi_clock
+======================================================
+
+* git clone https://github.com/texadactyl/rpi_clock
+
+* Edit $HOME/rpi_clock/bin/rpi_clock.py:
+
+	WU_API_KEY = Your Weather Underground API key
+	URL_RIGHT = JSON script for your Weather Underground local weather station
+	
+* Append ~/.profile with:
+
+		python3 $HOME/rpi_clock/bin/rpi_clock.py
+
+* Give user pi the ability to sudo reboot without a specifying a password.
+  This capability is used by the second rpi_clock screen when displayed.
+  Append /etc/sudoers with:
+
+	## user is allowed to execute power-off and reboot 
+	pi ALL=NOPASSWD: /sbin/shutdown
+
+* sudo reboot
+
+======================================================
+Finally
+======================================================
+
+The rpi_clock application should now be running using the touchscreen display.
+If you touch the screen, a 2nd screen will prompt you to do one of the following:
+
+	Go back to the date, time, and weather display.
+	Restart the Raspberry Pi.
+	Shutdown the Raspberry Pi.
+
+======================================================
+References
+======================================================
+
+* rpi_clock project: https://github.com/texadactyl/rpi_clock
+* Weather Underground API: https://www.wunderground.com/weather/api/d/docs
+* Python 3 language reference: https://docs.python.org/3/reference/
+* Python 3 standard library reference: https://docs.python.org/3/library/
+* Python 3 Tk reference: https://docs.python.org/3/library/tk.html
+* Git reference: http://gitref.org/
+* Guide to github.com: https://guides.github.com/activities/hello-world/
+* Quimat software: https://github.com/goodtft/LCD-show
+
