@@ -129,10 +129,9 @@ Update the base system since the img file was made available for downloading.
 
 * sudo apt update
 
-* sudo apt -y dist-upgrade   
+* sudo apt -y dist-upgrade   # This step might run like a tortoise.
 
-# This last step might run like a tortoise.
-# Also, if a new kernel is installed, don't bother rebooting just quite yet.
+* sudo reboot
 
 =============================================================================
 Do hardware assembly.
