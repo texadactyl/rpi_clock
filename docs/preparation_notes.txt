@@ -146,7 +146,7 @@ Calibrate and fix the calibration section manually (ugh!).
 * Follow github LCD-show software installation instructions.
   This updates several system storage areas of the Raspberry Pi.
 
-* Follow github LCD-show touchscreen calibration instructions.
+* Follow github LCD-show touchscreen calibration instructions on the supplied DVD from Quimat.
   Update /etc/X11/xorg.conf.d/99-calibration.conf as indicated.
 
 * To get the mouse-pointer to move in the same direction as the pen or a finger on the touch-screen, 
