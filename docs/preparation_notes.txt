@@ -99,8 +99,6 @@ Set up on the Raspberry Pi target system with HDMI display
 		tmpfs /tmp tmpfs defaults,noatime,nosuid,size=256m 0 0
 		tmpfs /run tmpfs defaults,noatime,nosuid,size=64m 0 0
 
-	sudo reboot
-
 * Optional: Create a static IP address for convenience with an external SSH client.
 
 	Assuming that: 
