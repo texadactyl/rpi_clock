@@ -206,7 +206,7 @@ Stop X from timing out the display and going blank.
 	
 * Append ~/.profile with:
 
-		python3 $HOME/rpi_clock/bin/rpi_clock.py
+	(python3 $HOME/rpi_clock/bin/rpi_clock.py 2>&1 >rpi_clock.log) &
 
 * Give user pi the ability to sudo reboot without a specifying a password.
   This capability is used by the second rpi_clock screen when displayed.
