@@ -161,6 +161,8 @@ As an aside, I experimented with rotate values and observed:
 	rotate=180 	start of display area is at physical right
 	rotate=270 	start of display area is at physical top (right-side up)
 
+Then, sudo reboot
+
 ======================================================
 Touchcreen Calibration
 Fix the calibration section manually (ugh!).
