@@ -129,7 +129,7 @@ Update the base system since the img file was made available for downloading.
 
 * sudo apt update
 
-# The next step might run like a tortoise.
+# The next step will run like a tortoise.  Patience.
 # Press return/enter to keep current configurations when prompted.
 * sudo apt -y dist-upgrade   
 
