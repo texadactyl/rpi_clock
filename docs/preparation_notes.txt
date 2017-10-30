@@ -138,34 +138,12 @@ Update the base system since the img file was made available for downloading.
 =============================================================================
 Do hardware assembly.
 Add drivers for touchscreen display from https://github.com/goodtft/LCD-show.
-Calibrate and fix the calibration section manually (ugh!).
 =============================================================================
 
 * The hardware installation is indicated with a picture and no guidance.  Line up pins as shown.
 
 * Follow github LCD-show software installation instructions.
   This updates several system storage areas of the Raspberry Pi.
-
-* Follow github LCD-show touchscreen calibration instructions on the supplied DVD from Quimat.
-  Update /etc/X11/xorg.conf.d/99-calibration.conf as indicated.
-
-* To get the mouse-pointer to move in the same direction as the pen or a finger on the touch-screen, 
-  I added the following just before EndSection in /etc/X11/xorg.conf.d/99-calibration.conf:
-
-    Option "InvertY" "true"
-    Option "InvertX" "true"
-
-* Stop X from timing out the display and going blank:
-  Create or append /etc/X11/xorg.conf as follows:
-
-	Section "ServerFlags"
-	Option "blank time" "0"
-	Option "standby time" "0"
-	Option "suspend time" "0"
-	Option "off time" "0"
-	EndSection 
-
-* sudo reboot
 
 ======================================================
 Screen Orientation
@@ -182,6 +160,36 @@ As an aside, I experimented with rotate values and observed:
 	rotate=90 	start of display area is at physical bottom (up-side down)
 	rotate=180 	start of display area is at physical right
 	rotate=270 	start of display area is at physical top (right-side up)
+
+======================================================
+Touchcreen Calibration
+Fix the calibration section manually (ugh!).
+======================================================
+
+* Follow github LCD-show touchscreen calibration instructions on the supplied DVD from Quimat.
+  Update /etc/X11/xorg.conf.d/99-calibration.conf as indicated.
+
+* To get the mouse-pointer to move in the same direction as the pen or a finger on the touch-screen, 
+  I added the following just before EndSection in /etc/X11/xorg.conf.d/99-calibration.conf:
+
+    Option "InvertY" "true"
+    Option "InvertX" "true"
+
+======================================================
+Stop X from timing out the display and going blank.
+======================================================
+
+* Optional: Stop X from timing out the display and going blank:
+  Create or append /etc/X11/xorg.conf as follows:
+
+	Section "ServerFlags"
+	Option "blank time" "0"
+	Option "standby time" "0"
+	Option "suspend time" "0"
+	Option "off time" "0"
+	EndSection 
+
+* sudo reboot
 
 ======================================================
  Install rpi_clock
