@@ -75,14 +75,10 @@ Set up on the Raspberry Pi target system with HDMI display
 
 	sudo raspi-config
 		4 Localization Options
-			I1 Locale			# For USA: set to en_US.UTF-8
-			I2 Timezone			# Set to local timezone as appropriate for your region
+			I1 Locale		# For USA: set to en_US.UTF-8
+			I2 Timezone		# Set to local timezone as appropriate for your region
+			I3 Keyboard Layout	# For USA: set to Generic 104-key PC, English (US) layout
 			I4 Wifi Country		# Set the country for your Wifi
-
-* Non-UK only (E.g. USA)
-
-	# For USA: set to Generic 104-key PC, English (US) layout
-	sudo dpkg-reconfiguration keyboard-configuration   
 
 * If you made any localization modifications in the previous steps, then:
 
