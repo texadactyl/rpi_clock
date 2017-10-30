@@ -13,12 +13,14 @@ This is *NOT* commercial software; instead, usage is covered by the GNU General 
 
 See the license.txt and gplv3.txt files for the GNU licensing information.
 
-GETTING STARTED
+TECHNICAL CONTENTS
 
 Subfolders:
 
 * bin - rpi_clock.py (Python 3 source code)
 * docs - project documentation (admittedly, skimpy at the moment)
+
+GETTING STARTED
 
 The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note.
 
