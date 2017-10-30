@@ -93,10 +93,13 @@ Set up on the Raspberry Pi target system with HDMI display
 * If you are using Wifi, connect to your router now.
 
 * Optional: Save wear and tear on the MicroSD and run somewhat faster.
-  As the root, edit /etc/fstab and append with:
 
-	tmpfs /tmp tmpfs defaults,noatime,nosuid,size=256m 0 0
-	tmpfs /run tmpfs defaults,noatime,nosuid,size=64m 0 0
+	As the root, edit /etc/fstab and append with:
+
+		tmpfs /tmp tmpfs defaults,noatime,nosuid,size=256m 0 0
+		tmpfs /run tmpfs defaults,noatime,nosuid,size=64m 0 0
+
+	sudo reboot
 
 * Optional: Create a static IP address for convenience with an external SSH client.
 
