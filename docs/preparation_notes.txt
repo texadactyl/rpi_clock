@@ -90,6 +90,8 @@ Set up on the Raspberry Pi target system with HDMI display
 		5 Interfacing Options
 			P2 SSH (Enable the SSH server)
 
+* If you are using Wifi, connect to your router now.
+
 * Optional: Save wear and tear on the MicroSD and run somewhat faster.
   As the root, edit /etc/fstab and append with:
 
