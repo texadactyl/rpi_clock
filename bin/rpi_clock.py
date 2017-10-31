@@ -13,7 +13,7 @@ SLEEP_TIME_MSEC = SLEEP_TIME_SEC*1000 # milliseconds
 # Weather Underground parameters
 URL_LEFT = 'http://api.wunderground.com/api/'
 URL_RIGHT = '/conditions/q/TX/Richardson.json'
-WU_API_KEY = 'd2174ac035b96428'
+WU_API_KEY = 'YOUR API KEY GOES HERE'
 FULL_URL = URL_LEFT + WU_API_KEY + URL_RIGHT
 URL_REQUEST_TIMEOUT_SEC = 60
 COUNT_START = 20 # Fetch weather every 20th main loop execution
