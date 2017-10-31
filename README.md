@@ -22,9 +22,11 @@ Subfolders:
 
 GETTING STARTED
 
-The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note.
+The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note.  
 
 Feel free to contact richard.elkins@gmail.com for inquiries and issues, especially if you find any bugs.  I'll respond as soon as I can.
 
 Richard Elkins
 Dallas, Texas, USA, 3rd Rock, Sol
+
+P.S. Admittedly, there seems to be other 3.5" TFT display products which do NOT require special drivers as of the lastest Raspbian during 2017 (more desirable IMO).  In fact, the Quimat product might too.  I just got caught in the middle!  Some time in the future, I might try it without the Quimat-supplied driver software.
