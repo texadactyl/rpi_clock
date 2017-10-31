@@ -24,7 +24,7 @@ GETTING STARTED
 
 The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note.  
 
-AFTER THOUGHTS
+AFTERTHOUGHTS
 
 Admittedly, there seems to be other 3.5" TFT display products which do NOT require special drivers as of the lastest Raspbian during 2017 (more desirable IMO).  In fact, the Quimat product might too.  I just got caught in the middle!  Some time in the future, I might try it without the Quimat-supplied driver software.
 
