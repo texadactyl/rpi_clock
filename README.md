@@ -5,7 +5,7 @@ This git project constitutes a Raspberry Pi Clock & Weather display (rpi_clock),
 I used a Raspberry Pi 2.  It would not be terribly difficult to modify the rpi_clock.py Python 3 script to employ 
 
 * Another touch-screen display which interfaces with the Raspberry Pi 2 or 3.
-* Another Linux distribution or any O.S. which supports Python 3 and Tk.
+* Another Linux distribution or any O.S. which supports Python 3, JSON, and Tk.
 
 LICENSING
 
