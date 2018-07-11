@@ -209,8 +209,10 @@ Stop X from timing out the display and going blank.
 * Append $HOME/.profile with:
 
 	(python3 $HOME/rpi_clock/bin/rpi_clock.py 2>&1 >rpi_clock.log) &
-	sleep 5 # Rest for 5 seconds
-	killall zenity # Stop any pending zenity dialogs for user pi
+
+* Get rid of zenity "“Your Raspbian system has been upgraded …” messages which overlay the display by executing the following command:
+
+	rm $HOME/.config/autostart/pi-conf-backup.desktop
 
 * Give user pi the ability to sudo reboot without a specifying a password.
   This capability is used by the second rpi_clock screen when displayed.
