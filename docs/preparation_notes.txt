@@ -210,7 +210,7 @@ Stop X from timing out the display and going blank.
 
 	(python3 $HOME/rpi_clock/bin/rpi_clock.py 2>&1 >rpi_clock.log) &
 
-* Get rid of zenity "“Your Raspbian system has been upgraded …” messages which overlay the display by executing the following command:
+* Get rid of zenity "Your Raspbian system has been upgraded …” messages which overlay the display by executing the following command:
 
 	rm $HOME/.config/autostart/pi-conf-backup.desktop
 
