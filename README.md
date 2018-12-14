@@ -6,6 +6,7 @@ I used a Raspberry Pi 2.  It would not be terribly difficult to modify the rpi_c
 
 * Another touch-screen display which interfaces with the Raspberry Pi 2 or 3.
 * Another Linux distribution or any O.S. which supports Python 3, JSON, and Tk.
+* Run on MacOS or Windows.
 
 LICENSING
 
@@ -22,13 +23,13 @@ Subfolders:
 
 GETTING STARTED
 
-The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note.  
+The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note. If you do this project on some other system base (E.g. MacOS or Windows), please let me know how the instructions changed and how is your project doing. 
 
 AFTERTHOUGHTS
 
 Admittedly, there seems to be other 3.5" TFT display products which claim to NOT require special drivers as of the latest Raspbian during 2017 (more desirable IMO).  In fact, the Quimat product might too.  I just got caught in the middle!  Some time in the future, I might try it without the Quimat-supplied driver software.  If that effort is successful, I will update this project.
 
-Will this work on a Pi Zero?  Pi A or B?
+Will this work on a Pi Zero?  Pi A or B?  Please let me know if you do this.  Thanks.
 
 Feel free to contact richard.elkins@gmail.com for inquiries and issues, especially if you find any bugs.  I'll respond as soon as I can.
 
