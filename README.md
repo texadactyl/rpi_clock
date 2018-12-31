@@ -1,4 +1,4 @@
-OVERVIEW
+OVERVIEW - updated 2018-12-31
 
 This git project constitutes a Raspberry Pi Clock & Weather display (rpi_clock), based on https://github.com/goodtft/LCD-show and the Quimat 3.5" TFT Touch Screen with a 320x480 resolution.
 
@@ -8,7 +8,7 @@ I have used a Raspberry Pi 2 and 3 Model B.  It would not be terribly difficult 
 * Another Linux distribution or any O.S. which supports Python 3, JSON, and Tk.
 * Run on MacOS or Windows.
 
-I have run this project on both Ubuntu and Raspberry Pi 3 model B with a standard display connected with HDMI cable.  It currently hogs the entire screen but it works.  To exit, you have to Alt-Tab to another open window and kill the rpi_clock task.  Not elegant!
+In addition to the TFT environment, I have run this project with Xubuntu on Raspberry Pi 3 model B with a standard display connected with HDMI cable.  It currently hogs the entire screen but it works.  To exit, you have to Alt-Tab to another open window and kill the rpi_clock task.  Not elegant!
 
 LICENSING
 
@@ -31,7 +31,7 @@ AFTERTHOUGHTS
 
 Admittedly, there seems to be other 3.5" TFT display products which claim to NOT require special drivers as of the latest Raspbian during 2017 (more desirable IMO).  In fact, the Quimat product might too.  I just got caught in the middle!  Some time in the future, I might try it without the Quimat-supplied driver software.  If that effort is successful, I will update this project.
 
-Will this work on a Pi Zero?  Older Pi A or B?  It should work fine.  Please let me know if you do this.  Thanks.
+Will this work on a Pi Zero?  Probably.  Older Pi A or B?  Probably.  Please let me know if you do this.  Thanks.
 
 Feel free to contact richard.elkins@gmail.com for inquiries and issues, especially if you find any bugs.  I'll respond as soon as I can.
 
