@@ -1,5 +1,7 @@
 Raspberry Pi Clock & Weather Display (rpi_clock)
 
+Tested on 2018-12-31 after rebuilding with Raspbian Stretch 2018-11-13
+
 Preparation Notes
 
 =======================================================
@@ -11,15 +13,13 @@ System requirements
 	- Raspberry Pi 2 or 3; maybe an earlier model too
 	- HDMI display and cable
 	- Quimat 3.5-inch TFT Touch Screen, 320x480 Resolution LCD Display with: 
-		"Protective Case" (easily breaks)
-		3 Heat Sinks
-		Touch Pen (useful and required for the calibration test)
+		-- "Protective Case" (easily breaks)
+		-- 3 Heat Sinks
+		-- Touch Pen (useful and required for the calibration test)
 
-* Operating system: Raspbian Stretch with Desktop
+* Operating system: Raspbian Stretch Lite
 
-	Tested with:
-		Release date:2017-09-07
-		Kernel version:4.9
+	Tested with Raspbian Stretch 2018-11-13
 
 * Software
 
@@ -36,12 +36,12 @@ On a Linux, Mac, or Windows desktop system, prepare the MicroSD
 
 * Go to https://www.raspberrypi.org/downloads/raspbian/
 
-* Download Raspbian Stretch (latest) ==> a zip file.
+* Download Raspbian Stretch Lite (latest) ==> a zip file.
 
 * Extract the img file from the zip file.
 
 * Write img to the MicroSD device. 
-  Windows user can follow the instructions provided by https://github.com/goodtft/LCD-show.
+  Windows user can follow the instructions provided by RaspberryPi.org.
   Instructions for a Linux or Unix PC follow:
 
      - Insert the MicroSD into a MicroSD caddy adapter which has a USB plug for your desktop computer.
@@ -55,7 +55,7 @@ On a Linux, Mac, or Windows desktop system, prepare the MicroSD
      - For me recently (an example), the following is how I proceeded:
           sudo umount /dev/sdc1     # Unmount an old boot partition
           sudo umount /dev/sdc2     # Unmount an old "/" partition
-          sudo dd if=/home/elkins/Downloads/2017-09-07-raspbian-stretch.img of=/dev/sdc bs=4M
+          sudo dd if=$HOME/Downloads/2017-09-07-raspbian-stretch.img of=/dev/sdc bs=4M
      - Note that I used "sdc" (entire device) and not "sdc1" (partition) as the target of `dd`.
 
 ===================================================================
@@ -80,10 +80,6 @@ Set up on the Raspberry Pi target system with HDMI display
 			I3 Keyboard Layout	# For USA: set to Generic 104-key PC, English (US) layout
 			I4 Wifi Country		# Set the country for your Wifi
 
-* If you made any localization modifications in the previous steps, then:
-
-	sudo reboot
-
 * Install SSH daemon services:
 
 	sudo raspi-config
@@ -92,14 +88,9 @@ Set up on the Raspberry Pi target system with HDMI display
 
 * If you are using Wifi, connect to your router now.
 
-* Optional: Save wear and tear on the MicroSD and run somewhat faster.
+* Keep the current host name for the moment (raspberrypi).
 
-	As the root, edit /etc/fstab and append with:
-
-		tmpfs /tmp tmpfs defaults,noatime,nosuid,size=256m 0 0
-		tmpfs /run tmpfs defaults,noatime,nosuid,size=64m 0 0
-
-* Optional: Create a static IP address for convenience with an external SSH client.
+* Suggested: Create a static IP address for convenience with an external SSH client.
 
 	Assuming that: 
 
@@ -112,7 +103,7 @@ Set up on the Raspberry Pi target system with HDMI display
 		interface wlan0
 		static ip_address=192.168.1.103/24
 		static routers=192.168.1.1
-		static domain_name_servers=192.168.1.1 8.8.8.8
+		static domain_name_servers=192.168.1.1
 
 	Note that if you are using wired Ethernet and its device name is eth0,
 	then specify this interface instead:
@@ -131,19 +122,29 @@ Update the base system since the img file was made available for downloading.
 
 # The next step will run like a tortoise.  Patience.
 # Press return/enter to keep current configurations when prompted.
-* sudo apt -y dist-upgrade   
+* sudo apt -y dist-upgrade 
+* sudo apt -y install python3-tk git 
 
-* sudo reboot
+* sudo shutdown now # for hardware assembly
+
+# Unplug power connector.
 
 =============================================================================
 Do hardware assembly.
-Add drivers for touchscreen display from https://github.com/goodtft/LCD-show.
 =============================================================================
 
 * The hardware installation is indicated with a picture and no guidance.  Line up pins as shown.
 
-* Follow github LCD-show software installation instructions.
-  This updates several system storage areas of the Raspberry Pi.
+* Plug power connector back in ---> Power up.
+
+======================================================
+After Reboot
+======================================================
+
+* git clone https://github.com/goodtft/LCD-show.git
+* chmod -R 755 LCD-show
+* cd LCD-show/
+* sudo bash ./LCD35-show
 
 ======================================================
 Screen Orientation
@@ -166,10 +167,15 @@ Then, sudo reboot
 ======================================================
 Touchcreen Calibration
 Fix the calibration section manually (ugh!).
+http://www.lcdwiki.com/3.5inch_RPi_Display
 ======================================================
 
 * Follow github LCD-show touchscreen calibration instructions on the supplied DVD from Quimat.
   Update /etc/X11/xorg.conf.d/99-calibration.conf as indicated.
+
+     sudo dpkg -i -B xinput-calibrator_0.7.5-1_armhf.deb
+     DISPLAY=:0.0
+     xinput_calibrator # difficult to do on small screen!!!
 
 * To get the mouse-pointer to move in the same direction as the pen or a finger on the touch-screen, 
   I added the following just before EndSection in /etc/X11/xorg.conf.d/99-calibration.conf:
@@ -205,6 +211,7 @@ Stop X from timing out the display and going blank.
 
 	WU_API_KEY = Your Weather Underground API key
 	URL_RIGHT = JSON script for your Weather Underground local weather station
+		(Change TX/Richardson to what is appropriate for you.)
 	
 * Append $HOME/.profile with:
 
@@ -213,13 +220,6 @@ Stop X from timing out the display and going blank.
 * Get rid of zenity "Your Raspbian system has been upgraded …” messages which overlay the display by executing the following command:
 
 	rm $HOME/.config/autostart/pi-conf-backup.desktop
-
-* Give user pi the ability to sudo reboot without a specifying a password.
-  This capability is used by the second rpi_clock screen when displayed.
-  Append /etc/sudoers with:
-
-	## user is allowed to execute power-off and reboot 
-	pi ALL=NOPASSWD: /sbin/shutdown
 
 * sudo reboot
 
@@ -245,5 +245,5 @@ References
 * Python 3 Tk reference: https://docs.python.org/3/library/tk.html
 * Git reference: http://gitref.org/
 * Guide to github.com: https://guides.github.com/activities/hello-world/
-* Quimat software: https://github.com/goodtft/LCD-show
+* Quimat documents & software: https://github.com/goodtft/LCD-show
 
