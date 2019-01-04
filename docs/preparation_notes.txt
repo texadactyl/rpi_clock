@@ -26,6 +26,7 @@ System requirements
 	- Python 3 (rpi_clock will not run with Python 2)
 	- python3-tk and dependencies, including tk, tcl, and libx11
 	- git
+	- ntp
 	- https://github.com/goodtft/LCD-show
 	- https://github.com/texadactyl/rpi_clock
 	- Weather Underground API reporting
