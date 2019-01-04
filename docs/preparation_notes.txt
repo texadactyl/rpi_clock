@@ -123,7 +123,7 @@ Update the base system since the img file was made available for downloading.
 # The next step will run like a tortoise.  Patience.
 # Press return/enter to keep current configurations when prompted.
 * sudo apt -y dist-upgrade 
-* sudo apt -y install python3-tk git 
+* sudo apt -y install python3-tk git ntp
 
 * sudo shutdown now # for hardware assembly
 
