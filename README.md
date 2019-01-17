@@ -36,4 +36,5 @@ Will this work on a Pi Zero?  Probably.  Older Pi A or B?  Probably.  Please let
 Feel free to contact richard.elkins@gmail.com for inquiries and issues, especially if you find any bugs.  I'll respond as soon as I can.
 
 Richard Elkins
-Dallas, Texas, USA, 3rd Rock, Sol
+
+Dallas, Texas, USA, 3rd Rock, Sol, ...
