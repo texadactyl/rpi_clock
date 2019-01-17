@@ -5,10 +5,10 @@ v3
 	Explicitly close and set to None the url_handle when a network error is encountered.
 	Reorganised code.
 	Introduced an optional windowed execution.
-	```
+	'''
     	   python3 rpi_clock.py   # full screen E.g. TFT display
     	   python3 rpi_clock.py w # windowed E.g. on your monitor
-	```
+	'''
 	Introduced an operator Quit to parent shell function.
 
 2018-05-07  v2
