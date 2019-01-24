@@ -8,7 +8,7 @@ I have used a Raspberry Pi 2 and 3 Model B.  It would not be terribly difficult 
 * Another Linux distribution or any O.S. which supports Python 3, JSON, and Tk.
 * Run on MacOS or Windows.
 
-In addition to the TFT environment, I have run this project with Xubuntu on Raspberry Pi 3 model B with a standard display connected with HDMI cable.  It currently hogs the entire screen but it works.  To exit, you have to either (1) Alt-Tab to another open window or (2) ssh from another computer and kill the full-screen rpi_clock task.  Not elegant!  It would not be difficult to modify the Python 3 program to use only a window instead of the whole screen.
+In addition to the TFT environment, I have run this project with Xubuntu on Raspberry Pi 3 model B with a standard display connected with HDMI cable.  See the configuration file for controlling whether or not rpi_clock uses the full screen or a windowed display.
 
 LICENSING
 
