@@ -1,7 +1,5 @@
 Raspberry Pi Clock & Weather Display (rpi_clock)
 
-Tested on 2018-12-31 after rebuilding with Raspbian Stretch 2018-11-13
-
 Preparation Notes
 
 =======================================================
@@ -216,7 +214,7 @@ Stop X from timing out the display and going blank.
 	
 * Append $HOME/.profile with:
 
-	(python3 $HOME/rpi_clock/bin/rpi_clock.py 2>&1 >rpi_clock.log) &
+    (cd $HOME/rpi_clock/bin; python3 rpi_clock.py rpi_clock.cfg 2>&1 > $HOME/rpi_clock.log) &
 
 * Get rid of zenity "Your Raspbian system has been upgraded …” messages which overlay the display by executing the following command:
 
