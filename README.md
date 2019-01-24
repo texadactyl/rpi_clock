@@ -20,7 +20,7 @@ TECHNICAL CONTENTS
 
 Subfolders:
 
-* bin - rpi_clock.py (Python 3 source code)
+* bin - *.py (Python 3 source code) and the configuration file
 * docs - project documentation (admittedly, skimpy at the moment)
 
 GETTING STARTED
