@@ -212,22 +212,28 @@ def get_display_data():
     Get date, time, farenheit-temperature, celsius-temperature, and general condition
     """
     global count_down, flag_display_normal, str_condition, str_temp
-    url_handle = None
+    url_handle = None # Define nil URL handle before usage
     FULL_URL = URL_LEFT + parms.WU_API_KEY + URL_MIDDLE + parms.LOCATION_JSON
     if parms.FLAG_TRACING:
         parms.logger.debug("get_display_data begin, URL={}".format(FULL_URL))
+    
+    # If count down is < 1, it is time for a display update with new data
     if count_down < 1:
         # Time to go geat new weather data
         count_down = parms.COUNT_START
         try:
             url_handle = urllib.request.urlopen(FULL_URL, None, parms.REQUEST_TIMEOUT_SEC)
             data = url_handle.read()
+            # Successful retrieval
             encoding = url_handle.info().get_content_charset("utf-8")
             parsed_json = json.loads(data.decode(encoding))
             str_temp = parsed_json["current_observation"]["temperature_string"]
             str_condition = parsed_json["current_observation"]["icon"]
+            # Successful JSON parse: temperature and general condition
+            # Close handle and mark it unused for gc
             url_handle.close()
             url_handle = None
+            # Use a normal display
             flag_display_normal = True
             if parms.FLAG_TRACING:
                 parms.logger.debug("weather access success")
@@ -235,11 +241,16 @@ def get_display_data():
             # Something went wrong.  Force a retry on next tk_root.mainloop cycle.
             if parms.FLAG_TRACING:
                 parms.logger.debug("Oh-oh, weather access failed: {}".format(FULL_URL))
+            # If URL connection succeeded, close handle and set handle to None
             if url_handle != None:
                 url_handle.close()
                 url_handle = None
+            # Force retrieval attempt next time around
             count_down = 0
+            # Force an error display with old data
             flag_display_normal = False
+    
+    # Successful retrieval and parse OR not, process what we have (even if stale)
     count_down = count_down - 1
     now = time.localtime()
     str_date = time.strftime(parms.FORMAT_DATE, now)
@@ -248,6 +259,8 @@ def get_display_data():
     if parms.FLAG_TRACING:
         parms.logger.debug("Display date = %s, time = %s, temp = %s - %s",
                            str_date, str_time, str_temp, str_condition)
+    
+    # Return strings for Tk display
     return(str_date, str_time, str_temp, str_condition)
 
 def display_main_procedure():
