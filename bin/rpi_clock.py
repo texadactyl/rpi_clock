@@ -212,6 +212,7 @@ def get_display_data():
     Get date, time, farenheit-temperature, celsius-temperature, and general condition
     """
     global count_down, flag_display_normal, str_condition, str_temp
+    url_handle = None
     FULL_URL = URL_LEFT + parms.WU_API_KEY + URL_MIDDLE + parms.LOCATION_JSON
     if parms.FLAG_TRACING:
         parms.logger.debug("get_display_data begin, URL={}".format(FULL_URL))
@@ -226,6 +227,7 @@ def get_display_data():
             str_temp = parsed_json["current_observation"]["temperature_string"]
             str_condition = parsed_json["current_observation"]["icon"]
             url_handle.close()
+            url_handle = None
             flag_display_normal = True
             if parms.FLAG_TRACING:
                 parms.logger.debug("weather access success")
@@ -233,6 +235,9 @@ def get_display_data():
             # Something went wrong.  Force a retry on next tk_root.mainloop cycle.
             if parms.FLAG_TRACING:
                 parms.logger.debug("Oh-oh, weather access failed: {}".format(FULL_URL))
+            if url_handle != None:
+                url_handle.close()
+                url_handle = None
             count_down = 0
             flag_display_normal = False
     count_down = count_down - 1
