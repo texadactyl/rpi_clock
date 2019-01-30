@@ -210,6 +210,7 @@ def talk_to_operator(event):
 def get_display_data():
     """
     Get date, time, farenheit-temperature, celsius-temperature, and general condition
+    if it is time to do so - governed by count_down.
     """
     global count_down, flag_display_normal, str_condition, str_temp
     url_handle = None # Define nil URL handle before usage
@@ -217,9 +218,9 @@ def get_display_data():
     if parms.FLAG_TRACING:
         parms.logger.debug("get_display_data begin, URL={}".format(FULL_URL))
     
-    # If count down is < 1, it is time for a display update with new data
+    # If count_down is < 1, then it is time for a Tk display update with new data
     if count_down < 1:
-        # Time to go geat new weather data
+        # Time to go get new weather data
         count_down = parms.COUNT_START
         try:
             url_handle = urllib.request.urlopen(FULL_URL, None, parms.REQUEST_TIMEOUT_SEC)
@@ -268,7 +269,7 @@ def display_main_procedure():
     Main display Loop
 
     Update display as needed.
-    Then, reschedule myself SLEEP_TIME_MSEC milliseconds in the future.
+    Then, reschedule myself SLEEP_TIME_MSEC milliseconds into the future.
     """
     global flag_display_normal, str_condition, str_temp
     if parms.FLAG_TRACING:
