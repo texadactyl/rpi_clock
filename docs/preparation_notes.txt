@@ -27,7 +27,7 @@ System requirements
 	- ntp
 	- https://github.com/goodtft/LCD-show
 	- https://github.com/texadactyl/rpi_clock
-	- Weather Underground API reporting
+	- Open Weather Map API (https://openweathermap.org/api)
 
 ===============================================================
 On a Linux, Mac, or Windows desktop system, prepare the MicroSD
@@ -208,9 +208,20 @@ Stop X from timing out the display and going blank.
 
 * Edit $HOME/rpi_clock/bin/rpi_clock.py:
 
-	WU_API_KEY = Your Weather Underground API key
-	URL_RIGHT = JSON script for your Weather Underground local weather station
-		(Change TX/Richardson to what is appropriate for you.)
+	LOCATION = your location
+		# I live in USA zip code 75248 so my specification was this:
+		# LOCATION = zip=75248,us
+	OWM_API_KEY = Your Open Weather Map API key
+	TEMP_UNITS = Temperature units in your culture
+		# metric (Celsius), imperial (Farenheit), or Kelvin
+		# I live in the USA so my specification was this:
+		# TEMP_UNITS = imperial
+	FORMAT_DATE = 
+		# Cultural date format
+	FORMAT_TIME =
+		# Cultural time format
+	FLAG_WINDOWED = False
+		# True only if you are running on a multi-window big-enough display
 	
 * Append $HOME/.profile with:
 
@@ -238,7 +249,7 @@ References
 ======================================================
 
 * rpi_clock project: https://github.com/texadactyl/rpi_clock
-* Weather Underground API: https://www.wunderground.com/weather/api/d/docs
+* Open Weather Map API: https://openweathermap.org/api
 * Python 3 language reference: https://docs.python.org/3/reference/
 * Python 3 standard library reference: https://docs.python.org/3/library/
 * Python 3 Tk reference: https://docs.python.org/3/library/tk.html
