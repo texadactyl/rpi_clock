@@ -1,17 +1,17 @@
 """
-    Raspberry Pi Clock & Weather Display (rpi_clock)
+Raspberry Pi Clock & Weather Display (rpi_clock)
 """
 
 import configparser
-import json
 import os
 import subprocess
 import sys
 import time
-import urllib.request
 from tkinter import Button, Label, Tk
 
+import requests
 from rpi_clock_parameters import RpiClockParameters
+
 parms = RpiClockParameters()
 count_down = 0
 flag_display_normal = False
@@ -20,8 +20,9 @@ str_temp = "No temperature yet"
 
 # ----------------------------------------------------------
 # Miscellaneous parameters
-URL_LEFT = "http://api.wunderground.com/api/"
-URL_MIDDLE = "/conditions/q"
+URL_LEFT = "https://api.openweathermap.org/data/2.5/weather?APPID="
+URL_MIDDLE_1 = "&"
+URL_MIDDLE_2 = "&units="
 
 # ----------------------------------------------------------
 # Video display parameters
@@ -100,9 +101,10 @@ def get_config_all(arg_config_path):
         parms.FLAG_TRACING = get_config_boolean(config, "FLAG_TRACING")
         parms.FORMAT_DATE = get_config_string(config, "FORMAT_DATE")
         parms.FORMAT_TIME = get_config_string(config, "FORMAT_TIME")
-        parms.LOCATION_JSON = get_config_string(config, "LOCATION_JSON")
+        parms.LOCATION = get_config_string(config, "LOCATION")
+        parms.TEMP_UNITS = get_config_string(config, "TEMP_UNITS")
         parms.FLAG_WINDOWED = get_config_boolean(config, "FLAG_WINDOWED")
-        parms.WU_API_KEY = get_config_string(config, "WU_API_KEY")
+        parms.OWM_API_KEY = get_config_string(config, "OWM_API_KEY")
         parms.COUNT_START = get_config_int(config, "COUNT_START")
         if parms.COUNT_START < 10:
             oops("COUNT_START invalid (< 10)")
@@ -207,50 +209,85 @@ def talk_to_operator(event):
     if parms.FLAG_TRACING:
         parms.logger.debug("talk_to_operator: after tk_popup.mainloop()")
 
+def get_refreshed_data(arg_url):
+    '''
+    Get JSON Data.  Possible outcomes:
+    * Success --> True, temperature, condition
+    * Network error --> False, "Network Failed", " "
+    * JSON parse error --> False, "JSON Parse Failed", " "
+    * Missing JSON element --> False, code value, descriptive message
+    * Unrecognizable message --> False, "Response Rubbish", "See Log"
+    '''
+    response = ""
+    try:
+        if parms.FLAG_TRACING:
+            parms.logger.debug("get_refreshed_data: Sending: " + arg_url)
+        response = requests.get(arg_url, timeout=parms.REQUEST_TIMEOUT_SEC)
+        if parms.FLAG_TRACING:
+            parms.logger.debug("get_refreshed_data: Network response: {}".format(response))
+    except:
+        parms.logger.error("Oh-oh, requests.get() failed: {}, URL: {}".format(sys.exc_info()[0], arg_url))
+        if response in (None, ""):
+            response = "*NIL*"
+        return False, "Network Failed", response
+
+    # Successful retrieval.  Parse JSON data.
+    if parms.FLAG_TRACING:
+        parms.logger.debug("get_refreshed_data: requests.get() ok: {}".format(response))
+    try:
+        parsed_json = response.json()
+        if parms.FLAG_TRACING:
+            parms.logger.debug("get_refreshed_data: Received parsed JSON: {}".format(parsed_json))
+    except:
+        parms.logger.error("get_refreshed_data: Oh-oh, the last response.json() failed")
+        return False, "JSON Parse Failed", " "
+
+    # Fetch data we are interested in.
+    try:
+        main = parsed_json["main"]
+        temp = main["temp"]
+        weather = parsed_json["weather"]
+        condition = weather[0]["description"]
+
+    except:
+        # Missing expected JSON elements
+        try:
+            str_code = parsed_json["cod"]
+            str_msg = parsed_json["message"]
+            # Got a standard error response message
+            parms.logger.error("Oh-oh, in the last response, str_code={}, str_msg={}".format(str_code, str_msg))
+            return False, str_code, str_msg
+        except:
+            parms.logger.error("Oh-oh, in the last response, 'cod' and/or 'message' is missing")
+            return False, "Response Rubbish", "See Log"
+
+    # Got the data that was expected
+    if parms.FLAG_TRACING:
+        parms.logger.debug("get_refreshed_data: weather access success")
+        parms.logger.debug("get_refreshed_data: Data for display: temp={}, condition={}".format(temp, condition))
+    return True, temp, condition
+
 def get_display_data():
     """
     Get date, time, farenheit-temperature, celsius-temperature, and general condition
     if it is time to do so - governed by count_down.
     """
     global count_down, flag_display_normal, str_condition, str_temp
-    url_handle = None # Define nil URL handle before usage
-    FULL_URL = URL_LEFT + parms.WU_API_KEY + URL_MIDDLE + parms.LOCATION_JSON
+    FULL_URL = URL_LEFT + parms.OWM_API_KEY + URL_MIDDLE_1 + parms.LOCATION + URL_MIDDLE_2 + parms.TEMP_UNITS
     if parms.FLAG_TRACING:
-        parms.logger.debug("get_display_data begin, URL={}".format(FULL_URL))
-    
-    # If count_down is < 1, then it is time for a Tk display update with new data
+        parms.logger.debug("get_display_data: begin, URL={}".format(FULL_URL))
+
+    # If count_down is < 1, then it is time fetch new network data
     if count_down < 1:
-        # Time to go get new weather data
+        if parms.FLAG_TRACING:
+            parms.logger.debug("get_display_data: count_down={}, time to refresh network data".format(count_down))
+        # Reset count_down to start value
         count_down = parms.COUNT_START
-        try:
-            url_handle = urllib.request.urlopen(FULL_URL, None, parms.REQUEST_TIMEOUT_SEC)
-            data = url_handle.read()
-            # Successful retrieval
-            encoding = url_handle.info().get_content_charset("utf-8")
-            parsed_json = json.loads(data.decode(encoding))
-            str_temp = parsed_json["current_observation"]["temperature_string"]
-            str_condition = parsed_json["current_observation"]["icon"]
-            # Successful JSON parse: temperature and general condition
-            # Close handle and mark it unused for gc
-            url_handle.close()
-            url_handle = None
-            # Use a normal display
-            flag_display_normal = True
-            if parms.FLAG_TRACING:
-                parms.logger.debug("weather access success")
-        except Exception:
-            # Something went wrong.  Force a retry on next tk_root.mainloop cycle.
-            if parms.FLAG_TRACING:
-                parms.logger.debug("Oh-oh, weather access failed: {}".format(FULL_URL))
-            # If URL connection succeeded, close handle and set handle to None
-            if url_handle != None:
-                url_handle.close()
-                url_handle = None
-            # Force retrieval attempt next time around
-            count_down = 0
-            # Force an error display with old data
-            flag_display_normal = False
-    
+        # Try to fetch current weather: temperature & general condition
+        flag_display_normal, str_temp, str_condition = get_refreshed_data(FULL_URL)
+        if not flag_display_normal:
+            count_down = 0 # force retry
+
     # Successful retrieval and parse OR not, process what we have (even if stale)
     count_down = count_down - 1
     now = time.localtime()
@@ -258,9 +295,9 @@ def get_display_data():
     str_time = time.strftime(parms.FORMAT_TIME, now)
     del now
     if parms.FLAG_TRACING:
-        parms.logger.debug("Display date = %s, time = %s, temp = %s - %s",
+        parms.logger.debug("Display date = %s, time = %s, temp = %s, cond = %s",
                            str_date, str_time, str_temp, str_condition)
-    
+
     # Return strings for Tk display
     return(str_date, str_time, str_temp, str_condition)
 

@@ -11,15 +11,14 @@ class RpiClockParameters:
     """
     FORMAT_DATE = "" # Locality date format
     FORMAT_TIME = "" # Hours:Minutes + AM/PM for the USA
-    LOCATION_JSON = "" # /STATE/CITY.json
-    FLAG_WINDOWED = True # False ==> full screen (normal for TFT)
-    WU_API_KEY = "" # Weatherunderground API key
-
-    # Not recommended to change the following parameters
-    COUNT_START = -1 # Fetch weather every 20th main loop execution
-    FLAG_TRACING = False # verbose tracing
-    REQUEST_TIMEOUT_SEC = -1 # Timeout if URL server does not respond in time
-    SLEEP_TIME_MSEC = -1 # milliseconds, time between URL contact attempts
+    LOCATION = "" # E.g. zip=75248,us
+    TEMP_UNITS = "" # E.g. imperial
+    FLAG_WINDOWED = False # False ==> full screen (normal for TFT)
+    OWM_API_KEY = "" # OpenWeatherMap API key
+    COUNT_START = -1 # Fetch weather after this many main loop executions
+    FLAG_TRACING = False # Verbose tracing
+    REQUEST_TIMEOUT_SEC = -1 # Timeout in seconds if URL server does not respond in time
+    SLEEP_TIME_MSEC = -1 # The amount of time between URL contact attempts in milliseconds
 
     # Name of project
     MYNAME = "rpi_clock"
