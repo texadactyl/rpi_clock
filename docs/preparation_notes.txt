@@ -213,13 +213,15 @@ Stop X from timing out the display and going blank.
 		# LOCATION = zip=75248,us
 	OWM_API_KEY = Your Open Weather Map API key
 	TEMP_UNITS = Temperature units in your culture
-		# metric (Celsius), imperial (Farenheit), or Kelvin
+		# metric (Celsius), imperial (Farenheit), or Kelvin (Science enthousiasts)
 		# I live in the USA so my specification was this:
 		# TEMP_UNITS = imperial
-	FORMAT_DATE = 
-		# Cultural date format
-	FORMAT_TIME =
-		# Cultural time format
+	FORMAT_DATE = Your cultural date format (see Python 3 time.strftime() function)
+		# I used this: FORMAT_DATE = %%b %%d, %%Y
+		# (Yes, you need to double '%' to get one '%'.)
+	FORMAT_TIME = Your cultural time format (see Python 3 time.strftime() function)
+		# I used this: FORMAT_TIME = %%I:%%M %%p %%Z
+		# (Yes, you need to double '%' to get one '%'.)
 	FLAG_WINDOWED = False
 		# True only if you are running on a multi-window big-enough display
 	
