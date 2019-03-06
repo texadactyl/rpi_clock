@@ -1,7 +1,12 @@
-v3
+v4
 ==
 
-2020-01-23  v3
+2019-03-06  v4
+* Migrated from the Weather Underground to Open Weather Maps because the former is being absorbed by a more commercial
+  enterprise, The Weather Channel.
+* All of the files in subdirectory `bin` are affected.
+
+2019-01-23  v3
 * Pulled out configuration parameters from rpi_clock.py into an external file, rpi_clock.cfg.
 * Updated preparation_notes.txt to indicate the changed last line to $HOME/.profile (needs 1 parameter).
 * Explicitly close and set to None the url_handle when a network error is encountered.
