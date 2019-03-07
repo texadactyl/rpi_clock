@@ -12,7 +12,8 @@ class RpiClockParameters:
     FORMAT_DATE = "" # Locality date format
     FORMAT_TIME = "" # Hours:Minutes + AM/PM for the USA
     LOCATION = "" # E.g. zip=75248,us
-    TEMP_UNITS = "" # E.g. imperial
+    TEMP_UNITS = "" # metric, imperial, or kelvin
+    TEMP_SUFFIX = "" # C, F, or K
     FLAG_WINDOWED = False # False ==> full screen (normal for TFT)
     OWM_API_KEY = "" # OpenWeatherMap API key
     COUNT_START = -1 # Fetch weather after this many main loop executions

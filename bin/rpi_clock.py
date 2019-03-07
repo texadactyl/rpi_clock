@@ -89,6 +89,15 @@ def get_config_boolean(arg_config, arg_key):
     parms.logger.info("get_config_boolean: {} = {}".format(arg_key, parm_value))
     return parm_value
 
+def validate_temp_units(str_temp_units):
+    wstr = str_temp_units.lower()
+    if wstr == "metric":
+        return True, "C"
+    if wstr == "imperial":
+        return True, "F"
+    if wstr == "kelvin":
+        return True, "K"
+    return False, "rubbish"
 def get_config_all(arg_config_path):
     """
     get all of the configuration parameters and store them in the parms object
@@ -103,6 +112,9 @@ def get_config_all(arg_config_path):
         parms.FORMAT_TIME = get_config_string(config, "FORMAT_TIME")
         parms.LOCATION = get_config_string(config, "LOCATION")
         parms.TEMP_UNITS = get_config_string(config, "TEMP_UNITS")
+        result, parms.TEMP_SUFFIX = validate_temp_units(parms.TEMP_UNITS)
+        if not result:
+            oops("TEMP_UNITS invalid (must be metric, imperial, or kelvin)")
         parms.FLAG_WINDOWED = get_config_boolean(config, "FLAG_WINDOWED")
         parms.OWM_API_KEY = get_config_string(config, "OWM_API_KEY")
         parms.COUNT_START = get_config_int(config, "COUNT_START")
@@ -320,7 +332,7 @@ def display_main_procedure():
     else:
         display_cur_temp.config(fg=FG_COLOR_ABNORMAL)
         display_cur_cond.config(fg=FG_COLOR_ABNORMAL)
-    display_cur_temp.config(text="%s" % str_temp)
+    display_cur_temp.config(text="%s %s" % (str_temp, parms.TEMP_SUFFIX))
     display_cur_cond.config(text="%s" % str_condition)
     if parms.FLAG_TRACING:
         parms.logger.debug("display_main_procedure going back to sleep")
