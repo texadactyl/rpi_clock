@@ -1,5 +1,9 @@
-v4
-==
+v4.1
+====
+
+2019-03-07  v4.1
+* Validate temperature units configuration parameter (TEMP_UNITS).  Accept entries in any case but the values in lower case must be metric, imperial, or kelvin.
+* Display temperature units to the right of current value: C (Metric/Celsius), F (Imperial/Farenheit), or K (Kelvin).
 
 2019-03-06  v4
 * Locked out of the Weather Underground!  Huh?!  To make a long story short, they are being absorbed by a more commercial
