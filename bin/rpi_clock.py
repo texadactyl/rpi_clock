@@ -234,14 +234,15 @@ def get_refreshed_data(arg_url):
     try:
         if parms.FLAG_TRACING:
             parms.logger.debug("get_refreshed_data: Sending: " + arg_url)
-        response = requests.get(arg_url, timeout=parms.REQUEST_TIMEOUT_SEC)
+        response = requests.get(arg_url, timeout=parms.REQUEST_TIMEOUT_SEC, verify=True)
         if parms.FLAG_TRACING:
             parms.logger.debug("get_refreshed_data: Network response: {}".format(response))
-    except:
-        parms.logger.error("Oh-oh, requests.get() failed: {}, URL: {}".format(sys.exc_info()[0], arg_url))
+    except Exception as err:
+        errstring = str(err)
+        parms.logger.error("Oh-oh, requests.get() got Exception: {}, URL: {}".format(errstring, arg_url))
         if response in (None, ""):
-            response = "*NIL*"
-        return False, "Network Failed", response
+            response = "Web FAILED (?)"
+        return False, "Exception", response
 
     # Successful retrieval.  Parse JSON data.
     if parms.FLAG_TRACING:
@@ -329,10 +330,11 @@ def display_main_procedure():
     if flag_display_normal:
         display_cur_temp.config(fg=FG_COLOR_NORMAL)
         display_cur_cond.config(fg=FG_COLOR_NORMAL)
+        display_cur_temp.config(text="%s %s" % (str_temp, parms.TEMP_SUFFIX))
     else:
         display_cur_temp.config(fg=FG_COLOR_ABNORMAL)
         display_cur_cond.config(fg=FG_COLOR_ABNORMAL)
-    display_cur_temp.config(text="%s %s" % (str_temp, parms.TEMP_SUFFIX))
+        display_cur_temp.config(text="%s" % (str_temp))
     display_cur_cond.config(text="%s" % str_condition)
     if parms.FLAG_TRACING:
         parms.logger.debug("display_main_procedure going back to sleep")
