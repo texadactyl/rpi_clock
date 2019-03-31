@@ -32,11 +32,11 @@ class RpiClockParameters:
         self.logger = logging.getLogger(tag)
         self.logger.setLevel(logging.DEBUG)
 
-        # create console handler and set level to 0
+        # create console handler
         console = logging.StreamHandler()
         console.setLevel(logging.DEBUG)
 
-        # create file handler and set level to 0
+        # create file handler
         fh = logging.FileHandler(log_file)
         fh.setLevel(logging.DEBUG)
 
@@ -51,11 +51,11 @@ class RpiClockParameters:
             piece_name = ""
         formatter = logging.Formatter(piece_ts + piece_name + "%(levelname)s::%(message)s")
 
-         # Add formatter to console
+         # Add formatter to console and file handler
         console.setFormatter(formatter)
         fh.setFormatter(formatter)
 
-        # Add console to logging object
+        # Add console & file handler to logging object
         self.logger.addHandler(console)
         self.logger.addHandler(fh)
 
