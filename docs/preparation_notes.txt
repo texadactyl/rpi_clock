@@ -25,6 +25,7 @@ System requirements
 	- python3-tk and dependencies, including tk, tcl, and libx11
 	- git
 	- ntp
+	- rng-tools
 	- https://github.com/goodtft/LCD-show
 	- https://github.com/texadactyl/rpi_clock
 	- Open Weather Map API (https://openweathermap.org/api)
@@ -122,7 +123,7 @@ Update the base system since the img file was made available for downloading.
 # The next step will run like a tortoise.  Patience.
 # Press return/enter to keep current configurations when prompted.
 * sudo apt -y dist-upgrade 
-* sudo apt -y install python3-tk git ntp
+* sudo apt -y install python3-tk git ntp rng-tools
 
 * sudo shutdown now # for hardware assembly
 
