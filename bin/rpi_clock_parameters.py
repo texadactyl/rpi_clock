@@ -24,7 +24,7 @@ class RpiClockParameters:
     # Name of project
     MYNAME = "rpi_clock"
 
-    def logging_init(self, tag="", use_ts=False):
+    def logging_init(self, tag="", log_file="/tmp/log.txt", use_ts=False):
         """
         Initialize the logging object and return it to caller.
         """
@@ -35,6 +35,10 @@ class RpiClockParameters:
         # create console handler and set level to 0
         console = logging.StreamHandler()
         console.setLevel(logging.DEBUG)
+
+        # create file handler and set level to 0
+        fh = logging.FileHandler(log_file)
+        fh.setLevel(logging.DEBUG)
 
         # Create formatter
         if use_ts:
@@ -49,9 +53,14 @@ class RpiClockParameters:
 
          # Add formatter to console
         console.setFormatter(formatter)
+        fh.setFormatter(formatter)
 
         # Add console to logging object
         self.logger.addHandler(console)
+        self.logger.addHandler(fh)
 
     def __init__(self):
-        self.logging_init(use_ts=True)
+        from pathlib import Path
+        home = str(Path.home())
+        self.logging_init(log_file=home+"/rpi_clock.log", use_ts=True)
+
