@@ -150,7 +150,8 @@ After Reboot
 Screen Orientation
 ======================================================
 
-I stood the display up such that the power chord and HDMI adapter are pointing up (the way I wanted for deployment).
+I stood the display up such that the power chord and HDMI adapter 
+re pointing up (the way I wanted for deployment).
 This setting in /boot/config.txt worked for me:
 
 	dtoverlay=tft35a:rotate=270
@@ -230,7 +231,8 @@ Stop X from timing out the display and going blank.
 
     (cd $HOME/rpi_clock/bin; python3 rpi_clock.py rpi_clock.cfg 2>&1 > $HOME/rpi_clock.log) &
 
-* Get rid of zenity "Your Raspbian system has been upgraded …” messages which overlay the display by executing the following command:
+* Get rid of zenity "Your Raspbian system has been upgraded …” messages 
+which overlay the display by executing the following command:
 
 	rm $HOME/.config/autostart/pi-conf-backup.desktop
 
