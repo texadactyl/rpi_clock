@@ -256,7 +256,6 @@ References
 * Python 3 language reference: https://docs.python.org/3/reference/
 * Python 3 standard library reference: https://docs.python.org/3/library/
 * Python 3 Tk reference: https://docs.python.org/3/library/tk.html
-* Git reference: http://gitref.org/
-* Guide to github.com: https://guides.github.com/activities/hello-world/
+* Github reference: https://guides.github.com/
 * Quimat documents & software: https://github.com/goodtft/LCD-show
 
