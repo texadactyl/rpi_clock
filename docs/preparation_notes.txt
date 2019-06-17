@@ -41,7 +41,7 @@ On a Linux, Mac, or Windows desktop system, prepare the MicroSD
 * Extract the img file from the zip file.
 
 * Write img to the MicroSD device. 
-  Windows user can follow the instructions provided by RaspberryPi.org.
+  Mac and Windows user can follow the instructions provided by RaspberryPi.org.
   Instructions for a Linux or Unix PC follow:
 
      - Insert the MicroSD into a MicroSD caddy adapter which has a USB plug for your desktop computer.
