@@ -168,7 +168,7 @@ Then, sudo reboot
 ======================================================
 Touchcreen Calibration
 Fix the calibration section manually (ugh!).
-http://www.lcdwiki.com/3.5inch_RPi_Display
+Might be useful: http://www.lcdwiki.com/3.5inch_RPi_Display
 ======================================================
 
 * Follow github LCD-show touchscreen calibration instructions on the supplied DVD from Quimat.
@@ -213,6 +213,7 @@ Stop X from timing out the display and going blank.
 	LOCATION = your location
 		# I live in USA zip code 75248 so my specification was this:
 		# LOCATION = zip=75248,us
+		# This might help as a syntax guide: https://openweathermap.org/current
 	OWM_API_KEY = Your Open Weather Map API key
 	TEMP_UNITS = Temperature units in your culture
 		# metric (Celsius), imperial (Farenheit), or Kelvin (Science enthousiasts)
@@ -225,7 +226,8 @@ Stop X from timing out the display and going blank.
 		# I used this: FORMAT_TIME = %%I:%%M %%p %%Z
 		# (Yes, you need to double '%' to get one '%'.)
 	FLAG_WINDOWED = False
-		# True only if you are running on a multi-window big-enough display
+		# Set True only if you are running on a multi-window big-enough display
+		# on a PC.  I know of at least one person who is doing this.
 	
 * Append $HOME/.profile with:
 
