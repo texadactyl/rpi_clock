@@ -1,7 +1,7 @@
 v4.2
 ====
 
-2019-06-20  v4.2
+2019-06-20  v4.2  Issue #6
 * I missed a spot in the preparation notes after I externalized all of the configuration parameters out of rpi_clock.py and into a new file, rpi_clock.cfg (v3).  The file rpi_clock_parameters.py is a class defining the parameters so they can be accessed by rpi_clock.py.
 * In Python 3 versions earlier than 3.5, this exception occurs: 
 AttributeError: type object 'Path' has no attribute 'home'.
