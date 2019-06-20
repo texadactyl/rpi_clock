@@ -208,7 +208,7 @@ Stop X from timing out the display and going blank.
 
 * git clone https://github.com/texadactyl/rpi_clock
 
-* Edit $HOME/rpi_clock/bin/rpi_clock.py:
+* Edit $HOME/rpi_clock/bin/rpi_clock.cfg:
 
 	LOCATION = your location
 		# I live in USA zip code 75248 so my specification was this:
