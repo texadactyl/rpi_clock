@@ -161,7 +161,7 @@ def initialize_the_process():
         oops("initialization: Cannot access config file specified as {}".format(config_path))
     get_config_all(config_path)
 
-    ### Done, return logger handle to caller
+    ### Done
     parms.logger.info("intialization: done")
 
 def proc_quit():
