@@ -10,13 +10,21 @@ I have used a Raspberry Pi 2 and 3 Model B.  It would not be terribly difficult 
 
 In addition to the TFT environment, I have run this project with Xubuntu on Raspberry Pi 3 model B with a standard display connected with HDMI cable.  See the configuration file for controlling whether or not rpi_clock uses the full screen or a windowed display.
 
-LICENSING
+Package Dependencies
+--------------------
+
+requests
+tkinter
+
+Licensing
+---------
 
 This is *NOT* commercial software; instead, usage is covered by the GNU General Public License version 3 (2007).  In a nutshell, please feel free to use the project and share it as you will but please don't sell it.  Thanks!
 
 See the LICENSE file for the GNU licensing information.
 
-TECHNICAL CONTENTS
+Technical Contents
+------------------
 
 Subfolders:
 
@@ -27,7 +35,8 @@ GETTING STARTED
 
 The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note. If you do this project on some other system base (E.g. MacOS or Windows), please let me know how the instructions changed and how is your project doing. 
 
-AFTERTHOUGHTS
+Afterthoughts
+-------------
 
 Admittedly, there seems to be other 3.5" TFT display products which claim to NOT require special drivers as of the latest Raspbian during 2017 (more desirable IMO).  In fact, the Quimat TFT might work this way too.  I just got caught in the middle!  Some time in the future, I might try it without the Quimat-supplied driver software.  If that effort is successful, I will update this project.
 
