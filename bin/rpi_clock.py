@@ -42,8 +42,8 @@ BG_COLOR_POPUP = BG_COLOR_ROOT
 
 def oops(arg_string):
     """
-    Log an error-string and raise a UserWarning.
-    This will cause an orderly exit to the O.S.
+    Log an error-string.
+    Make an orderly exit to the O.S.
     """
     parms.logger.critical("OOPS, " + arg_string)
     sys.exit(86)
