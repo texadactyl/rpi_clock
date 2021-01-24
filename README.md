@@ -42,7 +42,7 @@ Admittedly, there seems to be other 3.5" TFT display products which claim to NOT
 
 Will this work on a Pi Zero?  Probably.  Older Pi A or B?  Probably.  Please let me know if you do this.  Thanks.
 
-Feel free to contact richard.elkins@gmail.com for inquiries and issues, especially if you find any bugs.  I'll respond as soon as I can.
+Feel free to raise an issue for inquiries, especially if you find any bugs.  I'll respond as soon as I can.
 
 Richard Elkins
 
