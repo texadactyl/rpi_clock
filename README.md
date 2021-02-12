@@ -31,7 +31,8 @@ Subfolders:
 * bin - *.py (Python 3 source code) and the configuration file
 * docs - project documentation (admittedly, skimpy at the moment)
 
-GETTING STARTED
+Getting Started
+---------------
 
 The starting point with this project is the docs/preparation_notes.txt file.  Just follow the instructions of this note. If you do this project on some other system base (E.g. MacOS or Windows), please let me know how the instructions changed and how is your project doing. 
 
