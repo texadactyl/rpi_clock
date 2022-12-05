@@ -34,7 +34,7 @@ class RpiClockParameters:
 
         # create console handler
         console = logging.StreamHandler()
-        console.setLevel(logging.DEBUG)
+        console.setLevel(logging.INFO)
 
         # create file handler
         fh = logging.FileHandler(log_file)
@@ -60,8 +60,7 @@ class RpiClockParameters:
         self.logger.addHandler(fh)
 
     def __init__(self):
-        #from pathlib import Path # Python3 version 3.5
-        #home = str(Path.home()) # Python3 version 3.5
-        home = "/home/pi"
-        self.logging_init(log_file=home+"/rpi_clock.log", use_ts=True)
-
+        from pathlib import Path
+        home = str(Path.home())
+        logfile = home + "/rpi_clock.log"
+        self.logging_init(log_file=logfile, use_ts=True)
