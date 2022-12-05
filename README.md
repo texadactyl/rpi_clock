@@ -13,8 +13,8 @@ In addition to the TFT environment, I have run this project with Xubuntu on Rasp
 Package Dependencies
 --------------------
 
-- requests
-- tkinter
+- Requests (available at pypi)
+- tkinter (included with Python 3)
 
 Licensing
 ---------
