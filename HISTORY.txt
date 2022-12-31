@@ -1,7 +1,10 @@
-v4.3
+v4.4
 ====
 
-2022-12-06  v4.2  Issue #12
+2022-12-31  v4.4  Issue #14
+* Change default value of SLEEP_TIME_MSEC from 60000 to 3000.
+
+2022-12-06  v4.3  Issue #12
 * Stop hard-coding the log output directory as /home/pi.  Its amazing that this was not reported before! 
 
 2019-06-20  v4.2  Issue #6
