@@ -2,6 +2,12 @@ See HISTORY.txt file for update history.
 
 This git project constitutes a Raspberry Pi Clock & Weather display (rpi_clock), based on https://github.com/goodtft/LCD-show and the Quimat 3.5" TFT Touch Screen with a 320x480 resolution and it uses the Open Weather Map API (https://openweathermap.org/api).
 
+************* 
+2023-01-10: 
+* My Quimat TFT died.  The installation of that product was less than satisfactory so I will not repeat that headache.
+* Having a devil of a time finding a replacement.  My preferred replacement product is https://www.adafruit.com/product/2097
+************* 
+
 I have used a Raspberry Pi 2 and 3 Model B.  It would not be terribly difficult to modify the rpi_clock.py Python 3 script to employ:
 
 * Another touch-screen display which interfaces with the Raspberry Pi 2 or 3.
