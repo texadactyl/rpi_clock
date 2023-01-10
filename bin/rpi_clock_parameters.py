@@ -2,8 +2,7 @@
 rpi_clock Parameter Class
 """
 import logging
-
-MYNAME = "rpi_clock"
+import version
 
 class RpiClockParameters:
     """
@@ -23,44 +22,17 @@ class RpiClockParameters:
 
     # Name of project
     MYNAME = "rpi_clock"
+    VERSION = version.VERSION
 
-    def logging_init(self, tag="", log_file="/tmp/log.txt", use_ts=False):
+    def  __init__(self):
         """
         Initialize the logging object and return it to caller.
         """
         # Create logging object, logger
-        self.logger = logging.getLogger(tag)
-        self.logger.setLevel(logging.DEBUG)
-
-        # create console handler
-        console = logging.StreamHandler()
-        console.setLevel(logging.INFO)
-
-        # create file handler
-        fh = logging.FileHandler(log_file)
-        fh.setLevel(logging.DEBUG)
-
-        # Create formatter
-        if use_ts:
-            piece_ts = "[%(asctime)s]::"
-        else:
-            piece_ts = ""
-        if tag != "":
-            piece_name = "%(name)s::"
-        else:
-            piece_name = ""
-        formatter = logging.Formatter(piece_ts + piece_name + "%(levelname)s::%(message)s")
-
-         # Add formatter to console and file handler
-        console.setFormatter(formatter)
-        fh.setFormatter(formatter)
-
-        # Add console & file handler to logging object
-        self.logger.addHandler(console)
-        self.logger.addHandler(fh)
-
-    def __init__(self):
-        from pathlib import Path
-        home = str(Path.home())
-        logfile = home + "/rpi_clock.log"
-        self.logging_init(log_file=logfile, use_ts=True)
+        logging.basicConfig(encoding='utf-8',
+                            format="%(asctime)s %(message)s",
+                            level=logging.INFO)
+        self.logger = logging.getLogger()
+        self.logger.info("===== rpi_clock begins =====")
+        msg = "Version " + version.VERSION
+        self.logger.info(msg)

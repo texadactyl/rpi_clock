@@ -233,8 +233,7 @@ Stop X from timing out the display and going blank.
 	
 * Append $HOME/.profile with:
 
-	PARENT=$HOME # <--- Assign PARENT to wherever the rpi_clock directory tree is immediately under.
-	(cd $PARENT/rpi_clock/bin; python3 rpi_clock.py rpi_clock.cfg 2>&1 > $PARENT/rpi_clock/rpi_clock.log) &
+    (cd $PARENT/rpi_clock/bin; python3 rpi_clock.py rpi_clock.cfg 2>&1 | tee $PARENT/rpi_clock/rpi_clock.log) &
 
 * Get rid of zenity "Your Raspbian system has been upgraded …” messages 
 which overlay the display by executing the following command:

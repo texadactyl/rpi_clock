@@ -8,10 +8,13 @@ import subprocess
 import sys
 import time
 from tkinter import Button, Label, Tk
-
 import requests
+
+# rpi_clock imports
 from rpi_clock_parameters import RpiClockParameters
 
+# ----------------------------------------------------------
+# Miscellaneous parameters
 parms = RpiClockParameters()
 count_down = 0
 flag_display_normal = False
@@ -19,13 +22,13 @@ str_condition = "No condition yet"
 str_temp = "No temperature yet"
 
 # ----------------------------------------------------------
-# Miscellaneous parameters
+# Miscellaneous constants
 URL_LEFT = "https://api.openweathermap.org/data/2.5/weather?APPID="
 URL_MIDDLE_1 = "&"
 URL_MIDDLE_2 = "&units="
 
 # ----------------------------------------------------------
-# Video display parameters
+# Video display constants
 WINDOW_SIZE_ROOT = "480x320"
 WINDOW_SIZE_POPUP = "320x200"
 FONT_NAME = "helvetica"
@@ -35,17 +38,18 @@ FONT_STYLE = "normal"
 SPACER_SIZE = 20
 BUTTON_WIDTH = 6
 BUTTON_HEIGHT = 2
-FG_COLOR_NORMAL = "green"
+FG_COLOR_NORMAL = "white"
 FG_COLOR_ABNORMAL = "red"
-BG_COLOR_ROOT = "black"
-BG_COLOR_POPUP = BG_COLOR_ROOT
+BG_COLOR_ROOT = "blue"
+BG_COLOR_POPUP = "orange"
 
 def oops(arg_string):
     """
     Log an error-string.
     Make an orderly exit to the O.S.
     """
-    parms.logger.critical("OOPS, " + arg_string)
+    msg = "OOPS, " + arg_string
+    parms.logger.critical(msg)
     sys.exit(86)
 
 def get_config_string(arg_config, arg_key):
@@ -56,9 +60,9 @@ def get_config_string(arg_config, arg_key):
     try:
         parm_value = arg_config.get(parms.MYNAME, arg_key)
     except Exception as err:
-        oops("get_config_string: Trouble with config file key {}, reason: {}"\
-             .format(arg_key, repr(err)))
-    parms.logger.info("get_config_string: {} = {}".format(arg_key, parm_value))
+        oops(f"get_config_string: Trouble with config file key {arg_key}, reason: {repr(err)}")
+    msg = f"get_config_string: {arg_key} = {parm_value}"
+    parms.logger.info(msg)
     return parm_value
 
 def get_config_int(arg_config, arg_key):
@@ -69,9 +73,9 @@ def get_config_int(arg_config, arg_key):
     try:
         parm_value = arg_config.getint(parms.MYNAME, arg_key)
     except Exception as err:
-        oops("get_config_int: Trouble with config file key {}, reason: {}"\
-             .format(arg_key, repr(err)))
-    parms.logger.info("get_config_int: {} = {}".format(arg_key, parm_value))
+        oops(f"get_config_int: Trouble with config file key {arg_key}, reason: {repr(err)}")
+    msg = f"get_config_int: {arg_key} = {parm_value}"
+    parms.logger.info(msg)
     return parm_value
 
 def get_config_boolean(arg_config, arg_key):
@@ -82,12 +86,29 @@ def get_config_boolean(arg_config, arg_key):
     try:
         parm_value = arg_config.getboolean(parms.MYNAME, arg_key)
     except Exception as err:
-        oops("get_config_boolean: Trouble with config file key {}, reason: {}"\
-             .format(arg_key, repr(err)))
-    parms.logger.info("get_config_boolean: {} = {}".format(arg_key, parm_value))
+        oops(f"get_config_boolean: Trouble with config file key {arg_key}, reason: {repr(err)}")
+    msg = f"get_config_boolean: {arg_key} = {parm_value}"
+    parms.logger.info(msg)
     return parm_value
 
 def validate_temp_units(str_temp_units):
+    """
+    Validate the temperature units.
+
+    Parameters
+    ----------
+    str_temp_units : str
+        "metric". "imperial", or "kelvin"
+
+    Returns
+    -------
+    bool
+        True (success) or False (failure).
+    str
+        Success: "C", "F", or "K".
+        Failure: Reason for failure.
+
+    """
     wstr = str_temp_units.lower()
     if wstr == "metric":
         return True, "C"
@@ -95,7 +116,7 @@ def validate_temp_units(str_temp_units):
         return True, "F"
     if wstr == "kelvin":
         return True, "K"
-    return False, "rubbish"
+    return False, "rubbish input"
 def get_config_all(arg_config_path):
     """
     get all of the configuration parameters and store them in the parms object
@@ -103,8 +124,8 @@ def get_config_all(arg_config_path):
     try:
         config = configparser.ConfigParser()
         config.read(arg_config_path)
-        parms.logger.info("get_config_all: config file {} was loaded into memory"\
-                          .format(arg_config_path))
+        msg = f"get_config_all: config file {arg_config_path} was loaded into memory"
+        parms.logger.info(msg)
         parms.FLAG_TRACING = get_config_boolean(config, "FLAG_TRACING")
         parms.FORMAT_DATE = get_config_string(config, "FORMAT_DATE")
         parms.FORMAT_TIME = get_config_string(config, "FORMAT_TIME")
@@ -124,50 +145,16 @@ def get_config_all(arg_config_path):
         parms.SLEEP_TIME_MSEC = get_config_int(config, "SLEEP_TIME_MSEC")
         if parms.SLEEP_TIME_MSEC < 10:
             oops("SLEEP_TIME_MSEC invalid (< 10)")
-        del config
     except Exception as err:
-        oops("get_config: Trouble with config file {}, reason: {}"\
-             .format(arg_config_path, repr(err)))
+        oops(f"get_config: Trouble with config file {arg_config_path}, reason: {repr(err)}")
     parms.logger.info("get_config_all: done")
-
-def initialize_the_process():
-    """
-    Initialize the rpi_clock process.
-    1. Basic diagnosis
-    2. Call get_config_all()
-    """
-    ### Must be a main program
-    if __name__ != "__main__":
-        oops("initialization: Must be a main program")
-
-    ### Must be Python 3.x
-    if sys.version_info[0] < 3:
-        oops("initialization: Requires Python 3")
-
-    ### Exit immediately if this is an SSH session
-    if "SSH_CLIENT" in os.environ or "SSH_TTY" in os.environ:
-        oops("initialization: Must not run in SSH session")
-
-    ## Exit immediately if no configuration file was specified
-    nargs = len(sys.argv)
-    if nargs < 2: # then there is a command-line argument
-        oops("initialization: Configuration file path is required")
-
-    ### Process configuration file
-    config_path = sys.argv[1]
-    if not os.path.isfile(config_path):
-        oops("initialization: Cannot access config file specified as {}".format(config_path))
-    get_config_all(config_path)
-
-    ### Done
-    parms.logger.info("intialization: done")
 
 def proc_quit():
     """
     Operator selected Quit
     """
     if parms.FLAG_TRACING:
-        parms.logger.debug("proc_quit: begin")
+        parms.logger.debug("proc_quit: going to sys.exit(0) next")
     sys.exit(0)
 
 def proc_reboot():
@@ -175,18 +162,18 @@ def proc_reboot():
     Operator selected Reboot
     """
     if parms.FLAG_TRACING:
-        parms.logger.debug("proc_reboot: begin")
+        parms.logger.debug("proc_reboot: going to reboot next")
     args = ["sudo", "shutdown", "-r", "now"]
-    subprocess.run(args, stdout=subprocess.PIPE)
+    subprocess.run(args, stdout=subprocess.PIPE, check=False)
 
 def proc_shutdown():
     """
     Operator selected Shutdown
     """
     if parms.FLAG_TRACING:
-        parms.logger.debug("proc_shutdown: begin")
+        parms.logger.debug("proc_shutdown: going to shutdown next")
     args = ["sudo", "shutdown", "now"]
-    subprocess.run(args, stdout=subprocess.PIPE)
+    subprocess.run(args, stdout=subprocess.PIPE, check=False)
 
 def talk_to_operator(event):
     """
@@ -194,7 +181,8 @@ def talk_to_operator(event):
     """
 
     if parms.FLAG_TRACING:
-        parms.logger.debug("talk_to_operator: begin")
+        msg = "talk_to_operator: begin, Tk event = " + str(event)
+        parms.logger.debug(msg)
     tk_popup = Tk()
     tk_popup.title("Go back, Quit, Reboot, or Shutdown?")
     tk_popup.attributes("-fullscreen", False)
@@ -231,24 +219,29 @@ def get_refreshed_data(arg_url):
     response = ""
     try:
         if parms.FLAG_TRACING:
-            parms.logger.debug("get_refreshed_data: Sending: " + arg_url)
+            msg = "get_refreshed_data: Sending: " + arg_url
+            parms.logger.debug(msg)
         response = requests.get(arg_url, timeout=parms.REQUEST_TIMEOUT_SEC, verify=True)
         if parms.FLAG_TRACING:
-            parms.logger.debug("get_refreshed_data: Network response: {}".format(response))
+            msg = f"get_refreshed_data: Network response: {response}"
+            parms.logger.debug(msg)
     except Exception as err:
         errstring = str(err)
-        parms.logger.error("Oh-oh, requests.get() got Exception: {}, URL: {}".format(errstring, arg_url))
+        msg = f"Oh-oh, requests.get() got Exception: {errstring}, URL: {arg_url}"
+        parms.logger.error(msg)
         if response in (None, ""):
             response = "Web FAILED (?)"
         return False, "Exception", response
 
     # Successful retrieval.  Parse JSON data.
     if parms.FLAG_TRACING:
-        parms.logger.debug("get_refreshed_data: requests.get() ok: {}".format(response))
+        msg = f"get_refreshed_data: requests.get() ok: {response}"
+        parms.logger.debug(msg)
     try:
         parsed_json = response.json()
         if parms.FLAG_TRACING:
-            parms.logger.debug("get_refreshed_data: Received parsed JSON: {}".format(parsed_json))
+            msg = f"get_refreshed_data: Received parsed JSON: {parsed_json}"
+            parms.logger.debug(msg)
     except:
         parms.logger.error("get_refreshed_data: Oh-oh, the last response.json() failed")
         return False, "JSON Parse Failed", " "
@@ -266,16 +259,19 @@ def get_refreshed_data(arg_url):
             str_code = parsed_json["cod"]
             str_msg = parsed_json["message"]
             # Got a standard error response message
-            parms.logger.error("Oh-oh, in the last response, str_code={}, str_msg={}".format(str_code, str_msg))
+            msg = f"Oh-oh, in the last response, str_code={str_code}, str_msg={str_msg}"
+            parms.logger.error(msg)
             return False, str_code, str_msg
         except:
-            parms.logger.error("Oh-oh, in the last response, 'cod' and/or 'message' is missing")
+            msg = "Oh-oh, in the last response, 'cod' and/or 'message' is missing"
+            parms.logger.error(msg)
             return False, "Response Rubbish", "See Log"
 
     # Got the data that was expected
     if parms.FLAG_TRACING:
         parms.logger.debug("get_refreshed_data: weather access success")
-        parms.logger.debug("get_refreshed_data: Data for display: temp={}, condition={}".format(temp, condition))
+        msg = f"get_refreshed_data: Data for display: temp={temp}, condition={condition}"
+        parms.logger.debug(msg)
     return True, temp, condition
 
 def get_display_data():
@@ -284,14 +280,17 @@ def get_display_data():
     if it is time to do so - governed by count_down.
     """
     global count_down, flag_display_normal, str_condition, str_temp
-    FULL_URL = URL_LEFT + parms.OWM_API_KEY + URL_MIDDLE_1 + parms.LOCATION + URL_MIDDLE_2 + parms.TEMP_UNITS
+    FULL_URL = URL_LEFT + parms.OWM_API_KEY + URL_MIDDLE_1 \
+             + parms.LOCATION + URL_MIDDLE_2 + parms.TEMP_UNITS
     if parms.FLAG_TRACING:
-        parms.logger.debug("get_display_data: begin, URL={}".format(FULL_URL))
+        msg = f"get_display_data: begin, URL={FULL_URL}"
+        parms.logger.debug(msg)
 
     # If count_down is < 1, then it is time fetch new network data
     if count_down < 1:
         if parms.FLAG_TRACING:
-            parms.logger.debug("get_display_data: count_down={}, time to refresh network data".format(count_down))
+            msg = f"get_display_data: count_down={count_down}, time to refresh network data"
+            parms.logger.debug(msg)
         # Reset count_down to start value
         count_down = parms.COUNT_START
         # Try to fetch current weather: temperature & general condition
@@ -306,8 +305,8 @@ def get_display_data():
     str_time = time.strftime(parms.FORMAT_TIME, now)
     del now
     if parms.FLAG_TRACING:
-        parms.logger.debug("Display date = %s, time = %s, temp = %s, cond = %s",
-                           str_date, str_time, str_temp, str_condition)
+        msg = f"Display date = {str_date}, time = {str_time}, temp = {str_temp}, cond = {str_condition}"
+        parms.logger.debug(msg)
 
     # Return strings for Tk display
     return(str_date, str_time, str_temp, str_condition)
@@ -328,15 +327,47 @@ def display_main_procedure():
     if flag_display_normal:
         display_cur_temp.config(fg=FG_COLOR_NORMAL)
         display_cur_cond.config(fg=FG_COLOR_NORMAL)
-        display_cur_temp.config(text="%s %s" % (str_temp, parms.TEMP_SUFFIX))
+        display_cur_temp.config(text=f"{str_temp} {parms.TEMP_SUFFIX}")
     else:
         display_cur_temp.config(fg=FG_COLOR_ABNORMAL)
         display_cur_cond.config(fg=FG_COLOR_ABNORMAL)
-        display_cur_temp.config(text="%s" % (str_temp))
-    display_cur_cond.config(text="%s" % str_condition)
+        display_cur_temp.config(text=str_temp)
+    display_cur_cond.config(text=str_condition)
     if parms.FLAG_TRACING:
         parms.logger.debug("display_main_procedure going back to sleep")
     tk_root.after(parms.SLEEP_TIME_MSEC, display_main_procedure)
+
+def initialize_the_process():
+    """
+    Initialize the rpi_clock process.
+    1. Basic diagnosis
+    2. Call get_config_all()
+    """
+    ### Must be a main program
+    if __name__ != "__main__":
+        oops("initialization: Must be a main program")
+
+    ### Must be Python 3.x
+    if sys.version_info[0] < 3:
+        oops("initialization: Requires Python 3")
+
+    ### Exit immediately if this is an SSH session
+    if "SSH_CLIENT" in os.environ or "SSH_TTY" in os.environ:
+        oops("initialization: Must not run in SSH session")
+
+    ## Exit immediately if no configuration file was specified
+    nargs = len(sys.argv)
+    if nargs < 2: # then there is a command-line argument
+        oops("initialization: Configuration file path is required")
+
+    ### Process configuration file
+    config_path = sys.argv[1]
+    if not os.path.isfile(config_path):
+        oops(f"initialization: Cannot access config file specified as {config_path}")
+    get_config_all(config_path)
+
+    ### Done
+    parms.logger.info("intialization: done")
 
 # ----------------------------------------------------------
 ### Call process initialization (initialize_process).
@@ -345,6 +376,8 @@ initialize_the_process()
 # ----------------------------------------------------------
 ### Establish Tk root, configuration, geometry, and labels
 tk_root = Tk()
+titlestr = parms.MYNAME + " " + parms.VERSION
+tk_root.title(titlestr)
 tk_root.attributes("-fullscreen", not parms.FLAG_WINDOWED)
 tk_root.configure(background=BG_COLOR_ROOT)
 tk_root.geometry(WINDOW_SIZE_ROOT)
