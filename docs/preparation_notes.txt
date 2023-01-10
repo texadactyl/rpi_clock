@@ -208,6 +208,8 @@ Stop X from timing out the display and going blank.
 
 * git clone https://github.com/texadactyl/rpi_clock
 
+* Copy $HOME/rpi_clock/bin/sample_config.txt to $HOME/rpi_clock/bin/rpi_clock.cfg
+
 * Edit $HOME/rpi_clock/bin/rpi_clock.cfg:
 
 	LOCATION = your location
