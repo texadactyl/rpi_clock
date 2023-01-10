@@ -1,5 +1,9 @@
-v4.5
-====
+2023-01-10  v5.0  
+* Code cleanup.  
+* Fix issue #16 (Logging to a file is broken).  
+* Fix issue #17-a (Set Tk window title = program name plus the version).
+* Fix issue #17-b (Log version at startup).  
+* Issue #15 is postponed until I receive a TFT from Tinkersphere.
 
 2023-01-10  v4.5  Rename rpi_clock.cfg to sample_config.txt.  Update preparation_notes.txt.
 
