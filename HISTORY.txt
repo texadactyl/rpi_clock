@@ -1,5 +1,7 @@
-v4.4
+v4.5
 ====
+
+2023-01-10  v4.5  Rename rpi_clock.cfg to sample_config.txt.  Update preparation_notes.txt.
 
 2022-12-31  v4.4  Issue #14
 * Change default value of SLEEP_TIME_MSEC from 60000 to 3000.
