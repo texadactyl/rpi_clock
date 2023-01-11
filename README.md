@@ -34,8 +34,8 @@ Technical Contents
 
 Subfolders:
 
-* bin - *.py (Python 3 source code) and the configuration file
-* docs - project documentation (admittedly, skimpy at the moment)
+* bin - *.py (Python 3 source code) and a sample configuration file
+* docs - project installation documentation
 
 Getting Started
 ---------------
