@@ -226,13 +226,13 @@ Stop X from timing out the display and going blank.
 		# (Yes, you need to double '%' to get one '%'.)
 	FORMAT_TIME = Your cultural time format (see Python 3 time.strftime() function)
 		# I used this: FORMAT_TIME = %%I:%%M %%p %%Z
-		# (Yes, you need to double '%' to get one '%'.)
+		# (Yes, you need to double '%' to get one '%'.)   
 	FLAG_WINDOWED = False
 		# Set True only if you are running on a multi-window big-enough display
 		# on a PC.  I know of at least one person who is doing this.
 	
 * Append $HOME/.profile with:
-
+    PARENT=$HOME
     (cd $PARENT/rpi_clock/bin; python3 rpi_clock.py rpi_clock.cfg 2>&1 | tee $PARENT/rpi_clock/rpi_clock.log) &
 
 * Get rid of zenity "Your Raspbian system has been upgraded …” messages 
