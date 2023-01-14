@@ -29,8 +29,7 @@ class RpiClockParameters:
         Initialize the logging object and return it to caller.
         """
         # Create logging object, logger
-        logging.basicConfig(encoding='utf-8',
-                            format="%(asctime)s %(message)s",
+        logging.basicConfig(format="%(asctime)s %(message)s",
                             level=logging.INFO)
         self.logger = logging.getLogger()
         self.logger.info("===== rpi_clock begins =====")
