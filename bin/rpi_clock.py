@@ -353,7 +353,7 @@ def initialize_the_process():
 
     ### Exit immediately if this is an SSH session opened without -Y parameter
     if "DISPLAY" not in os.environ:
-       oops("initialization: Must ssh with -Y session (Enables trusted X11 forwarding)")
+       oops("initialization: Must invoke ssh with -Y parameter (Enables trusted X11 forwarding)")
 
     ## Exit immediately if no configuration file was specified
     nargs = len(sys.argv)
