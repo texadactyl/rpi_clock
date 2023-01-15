@@ -351,9 +351,9 @@ def initialize_the_process():
     if sys.version_info[0] < 3:
         oops("initialization: Requires Python 3")
 
-    ### Exit immediately if this is an SSH session
-    if "SSH_CLIENT" in os.environ or "SSH_TTY" in os.environ:
-        oops("initialization: Must not run in SSH session")
+    ### Exit immediately if this is an SSH session opened without -Y parameter
+    if "DISPLAY" not in os.environ:
+       oops("initialization: Must ssh with -Y session (Enables trusted X11 forwarding)")
 
     ## Exit immediately if no configuration file was specified
     nargs = len(sys.argv)
