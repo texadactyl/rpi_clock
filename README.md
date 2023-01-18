@@ -5,7 +5,9 @@ This git project constitutes a Raspberry Pi Clock & Weather display (rpi_clock),
 ************* 
 2023-01-10: 
 * My Quimat TFT died.  The installation of that product was less than satisfactory so I will not repeat that headache.
-* Having a devil of a time finding a replacement.  My preferred replacement product is https://www.adafruit.com/product/2097
+* Having a devil of a time finding a replacement.  My preferred replacement product is either of the following:
+-- https://www.adafruit.com/product/2441
+-- https://www.adafruit.com/product/2097 
 ************* 
 
 I have used a Raspberry Pi 2 and 3 Model B.  It would not be terribly difficult to modify the rpi_clock.py Python 3 script to employ:
