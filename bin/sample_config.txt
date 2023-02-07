@@ -43,7 +43,7 @@ SLEEP_TIME_MSEC = 3000
 # ====== #
 # Colors #
 # ====== #
-# Values permitted: white, black, green, blue, cyan, yellow, and magenta
+# Values permitted: red, white, black, green, blue, cyan, yellow, and magenta
 
 # Root window background color
 BG_COLOR_ROOT = blue
