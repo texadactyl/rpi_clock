@@ -8,6 +8,10 @@ class RpiClockParameters:
     """
     Configuration Parameters and dynamic globals for rpi_clock process.
     """
+    BG_COLOR_ROOT = "" # Root window background color
+    BG_COLOR_POPUP = "" # Popup for operator action background color
+    FG_COLOR_NORMAL = "" # Foreground normal text color
+    FG_COLOR_ALARM = "" # Foreground text color when something went wrong
     FORMAT_DATE = "" # Locality date format
     FORMAT_TIME = "" # Hours:Minutes + AM/PM for the USA
     LOCATION = "" # E.g. zip=75248,us

@@ -38,10 +38,7 @@ FONT_STYLE = "normal"
 SPACER_SIZE = 20
 BUTTON_WIDTH = 6
 BUTTON_HEIGHT = 2
-FG_COLOR_NORMAL = "white"
-FG_COLOR_ABNORMAL = "red"
-BG_COLOR_ROOT = "blue"
-BG_COLOR_POPUP = "orange"
+COLORS = ["white", "black", "green", "blue", "cyan", "yellow", "magenta"]
 
 def oops(arg_string):
     """
@@ -51,6 +48,12 @@ def oops(arg_string):
     msg = "OOPS, " + arg_string
     parms.logger.critical(msg)
     sys.exit(86)
+
+def lookup_color(color):
+    " Make sure that the argument color is valid"
+    if color in COLORS:
+        return True
+    return False
 
 def get_config_string(arg_config, arg_key):
     """
@@ -62,6 +65,21 @@ def get_config_string(arg_config, arg_key):
     except Exception as err:
         oops(f"get_config_string: Trouble with config file key {arg_key}, reason: {repr(err)}")
     msg = f"get_config_string: {arg_key} = {parm_value}"
+    parms.logger.info(msg)
+    return parm_value
+
+def get_config_color(arg_config, arg_key):
+    """
+    get a color string config parameter value
+    """
+    parm_value = "?"
+    try:
+        parm_value = arg_config.get(parms.MYNAME, arg_key)
+    except Exception as err:
+        oops(f"get_config_color: Trouble with config file key {arg_key}, reason: {repr(err)}")
+    if not lookup_color(parm_value):
+        oops(f"get_config_color: Config file key {arg_key} value is not a supported color: {parm_value}")
+    msg = f"get_config_color: {arg_key} = {parm_value}"
     parms.logger.info(msg)
     return parm_value
 
@@ -127,6 +145,10 @@ def get_config_all(arg_config_path):
         msg = f"get_config_all: config file {arg_config_path} was loaded into memory"
         parms.logger.info(msg)
         parms.FLAG_TRACING = get_config_boolean(config, "FLAG_TRACING")
+        parms.BG_COLOR_ROOT = get_config_color(config, "BG_COLOR_ROOT")
+        parms.BG_COLOR_POPUP = get_config_color(config, "BG_COLOR_POPUP")
+        parms.FG_COLOR_NORMAL = get_config_color(config, "FG_COLOR_NORMAL")
+        parms.FG_COLOR_ALARM = get_config_color(config, "FG_COLOR_ALARM")
         parms.FORMAT_DATE = get_config_string(config, "FORMAT_DATE")
         parms.FORMAT_TIME = get_config_string(config, "FORMAT_TIME")
         parms.LOCATION = get_config_string(config, "LOCATION")
@@ -153,16 +175,14 @@ def proc_quit():
     """
     Operator selected Quit
     """
-    if parms.FLAG_TRACING:
-        parms.logger.debug("proc_quit: going to sys.exit(0) next")
+    parms.logger.info("proc_quit: going to sys.exit(0) next")
     sys.exit(0)
 
 def proc_reboot():
     """
     Operator selected Reboot
     """
-    if parms.FLAG_TRACING:
-        parms.logger.debug("proc_reboot: going to reboot next")
+    parms.logger.info("proc_reboot: going to reboot next")
     args = ["sudo", "shutdown", "-r", "now"]
     subprocess.run(args, stdout=subprocess.PIPE, check=False)
 
@@ -170,8 +190,7 @@ def proc_shutdown():
     """
     Operator selected Shutdown
     """
-    if parms.FLAG_TRACING:
-        parms.logger.debug("proc_shutdown: going to shutdown next")
+    parms.logger.info("proc_shutdown: going to shutdown next")
     args = ["sudo", "shutdown", "now"]
     subprocess.run(args, stdout=subprocess.PIPE, check=False)
 
@@ -186,20 +205,20 @@ def talk_to_operator(event):
     tk_popup = Tk()
     tk_popup.title("Go back, Quit, Reboot, or Shutdown?")
     tk_popup.attributes("-fullscreen", False)
-    tk_popup.configure(background=BG_COLOR_POPUP)
+    tk_popup.configure(background=parms.BG_COLOR_POPUP)
     tk_popup.geometry(WINDOW_SIZE_POPUP)
     b_goback = Button(tk_popup, text="Go Back", command=tk_popup.destroy,
-                      font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=FG_COLOR_NORMAL)
+                      font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=parms.FG_COLOR_NORMAL)
     b_goback.focus_set()
     b_goback.pack(fill="both", expand=True)
     b_quit = Button(tk_popup, text="Quit", command=proc_quit,
-                    font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=FG_COLOR_NORMAL)
+                    font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=parms.FG_COLOR_NORMAL)
     b_quit.pack(fill="both", expand=True)
     b_reboot = Button(tk_popup, text="Reboot", command=proc_reboot,
-                      font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=FG_COLOR_NORMAL)
+                      font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=parms.FG_COLOR_NORMAL)
     b_reboot.pack(fill="both", expand=True)
     b_shutdown = Button(tk_popup, text="Shutdown", command=proc_shutdown,
-                        font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=FG_COLOR_NORMAL)
+                        font=(FONT_NAME, FONT_POPUP_SIZE, FONT_STYLE), fg=parms.FG_COLOR_NORMAL)
     b_shutdown.pack(fill="both", expand=True)
     if parms.FLAG_TRACING:
         parms.logger.debug("talk_to_operator: before tk_popup.mainloop()")
@@ -325,12 +344,12 @@ def display_main_procedure():
     display_date.config(text=str_date)
     display_time.config(text=str_time)
     if flag_display_normal:
-        display_cur_temp.config(fg=FG_COLOR_NORMAL)
-        display_cur_cond.config(fg=FG_COLOR_NORMAL)
+        display_cur_temp.config(fg=parms.FG_COLOR_NORMAL)
+        display_cur_cond.config(fg=parms.FG_COLOR_NORMAL)
         display_cur_temp.config(text=f"{str_temp} {parms.TEMP_SUFFIX}")
     else:
-        display_cur_temp.config(fg=FG_COLOR_ABNORMAL)
-        display_cur_cond.config(fg=FG_COLOR_ABNORMAL)
+        display_cur_temp.config(fg=parms.FG_COLOR_ALARM)
+        display_cur_cond.config(fg=parms.FG_COLOR_ALARM)
         display_cur_temp.config(text=str_temp)
     display_cur_cond.config(text=str_condition)
     if parms.FLAG_TRACING:
@@ -353,7 +372,7 @@ def initialize_the_process():
 
     ### Exit immediately if this is an SSH session opened without -Y parameter
     if "DISPLAY" not in os.environ:
-       oops("initialization: Must invoke ssh with -Y parameter (Enables trusted X11 forwarding)")
+        oops("initialization: Must invoke ssh with -Y parameter (Enables trusted X11 forwarding)")
 
     ## Exit immediately if no configuration file was specified
     nargs = len(sys.argv)
@@ -379,30 +398,30 @@ tk_root = Tk()
 titlestr = parms.MYNAME + " " + parms.VERSION
 tk_root.title(titlestr)
 tk_root.attributes("-fullscreen", not parms.FLAG_WINDOWED)
-tk_root.configure(background=BG_COLOR_ROOT)
+tk_root.configure(background=parms.BG_COLOR_ROOT)
 tk_root.geometry(WINDOW_SIZE_ROOT)
 display_spacer1 = Label(tk_root, font=(FONT_NAME, SPACER_SIZE, FONT_STYLE), \
-                        fg=FG_COLOR_NORMAL, bg=BG_COLOR_ROOT)
+                        fg=parms.FG_COLOR_NORMAL, bg=parms.BG_COLOR_ROOT)
 display_spacer1.pack()
 display_spacer1.config(text=" ")
 display_date = Label(tk_root, font=(FONT_NAME, FONT_SIZE, FONT_STYLE), \
-                     fg=FG_COLOR_NORMAL, bg=BG_COLOR_ROOT)
+                     fg=parms.FG_COLOR_NORMAL, bg=parms.BG_COLOR_ROOT)
 display_date.pack()
 
 display_time = Label(tk_root, font=(FONT_NAME, FONT_SIZE, FONT_STYLE), \
-                     fg=FG_COLOR_NORMAL, bg=BG_COLOR_ROOT)
+                     fg=parms.FG_COLOR_NORMAL, bg=parms.BG_COLOR_ROOT)
 display_time.pack()
 
 display_cur_temp = Label(tk_root, font=(FONT_NAME, FONT_SIZE, FONT_STYLE), \
-                         fg=FG_COLOR_NORMAL, bg=BG_COLOR_ROOT)
+                         fg=parms.FG_COLOR_NORMAL, bg=parms.BG_COLOR_ROOT)
 display_cur_temp.pack()
 
 display_cur_cond = Label(tk_root, font=(FONT_NAME, FONT_SIZE, FONT_STYLE), \
-                         fg=FG_COLOR_NORMAL, bg=BG_COLOR_ROOT)
+                         fg=parms.FG_COLOR_NORMAL, bg=parms.BG_COLOR_ROOT)
 display_cur_cond.pack()
 
 display_spacer2 = Label(tk_root, font=(FONT_NAME, SPACER_SIZE, FONT_STYLE), \
-                        fg=FG_COLOR_NORMAL, bg=BG_COLOR_ROOT)
+                        fg=parms.FG_COLOR_NORMAL, bg=parms.BG_COLOR_ROOT)
 display_spacer2.pack()
 display_spacer2.config(text=" ")
 
@@ -413,7 +432,8 @@ tk_root.after(0, display_main_procedure)
 tk_root.bind("<ButtonPress>", talk_to_operator)
 
 # ----------------------------------------------------------
-### Enter Tk mainloop
+### Turn off cursor and enter the Tk mainloop
+tk_root.config(cursor="none")
 parms.logger.info("Will now enter tk_root mainloop")
 tk_root.mainloop()
 

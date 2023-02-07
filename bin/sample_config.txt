@@ -40,6 +40,23 @@ FLAG_WINDOWED = False
 SLEEP_TIME_MSEC = 3000
 #                 ^^^^ Update display every 3 seconds.
 
+# ====== #
+# Colors #
+# ====== #
+# Values permitted: white, black, green, blue, cyan, yellow, and magenta
+
+# Root window background color
+BG_COLOR_ROOT = blue
+
+# Popup for operator action background color
+BG_COLOR_POPUP = green
+
+# Foreground normal text color
+FG_COLOR_NORMAL = white
+
+# Foreground text color when something went wrong
+FG_COLOR_ALARM = magenta
+
 # =================================================== #
 # Not recommended to change the remaining parameters.
 # =================================================== #
