@@ -38,7 +38,7 @@ FONT_STYLE = "normal"
 SPACER_SIZE = 20
 BUTTON_WIDTH = 6
 BUTTON_HEIGHT = 2
-COLORS = ["white", "black", "green", "blue", "cyan", "yellow", "magenta"]
+COLORS = ["red", "white", "black", "green", "blue", "cyan", "yellow", "magenta"]
 
 def oops(arg_string):
     """
