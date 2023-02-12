@@ -1,6 +1,6 @@
 2023-02-07  v5.1
 * Implement background and text color codes in the configuration file (issue #15).
-* Attempt to fix reported cursor problem (issue #15): Turned cursor off at before Tk mainloop.
+* Attempt to fix reported cursor problem (issue #15): Turned cursor off just before entering Tk mainloop.
 
 2023-01-10  v5.0
 * Code cleanup.
