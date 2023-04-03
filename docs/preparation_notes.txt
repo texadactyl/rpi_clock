@@ -230,7 +230,19 @@ Stop X from timing out the display and going blank.
 	FLAG_WINDOWED = False
 		# Set True only if you are running on a multi-window big-enough display
 		# on a PC.  I know of at least one person who is doing this.
-	
+
+	# Optional color specifications.  Default color values indicated.
+	# Color values permitted: red, white, black, green, blue, cyan, yellow, and magenta
+	# ---------------------------------------------------------------------------------
+	# Root window background color
+	BG_COLOR_ROOT = blue
+	# Popup for operator action background color
+	BG_COLOR_POPUP = green
+	# Foreground normal text color
+	FG_COLOR_NORMAL = white
+	# Foreground text color when something went wrong
+	FG_COLOR_ALARM = magenta
+
 * Append $HOME/.profile with:
     PARENT=$HOME
     (cd $PARENT/rpi_clock/bin; python3 rpi_clock.py rpi_clock.cfg 2>&1 | tee $PARENT/rpi_clock/rpi_clock.log) &
